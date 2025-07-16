@@ -6,6 +6,8 @@
 * Definí las historias de usuarios para el MVP.
 * Inicié el repositorio del proyecto.
 * Configuré la estructura inicial del proyecto.
+* Implementé ConfigModule de @nest/Config para el manejo de variables de entorno.
+
 ---
 
 * Primer Sprint:
