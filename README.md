@@ -2,6 +2,9 @@
 
 # 🐾 SaluVet - Narrativa del proyecto
 
+## [Bitácora](/docs/bitacora.md)
+## [Historias de Usuario](/docs/user-stories.md)
+
 ---
 
 SaluVet es un sistema de gestión diseñado para clínicas veterinarias, con el objetivo de organizar eficientemente la atención de pacientes (mascotas), el historial médico, la vacunación y los turnos. El sistema contempla múltiples roles con permisos diferenciados para reflejar el flujo de trabajo real de una clínica veterinaria.
