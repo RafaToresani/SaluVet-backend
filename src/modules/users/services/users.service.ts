@@ -12,8 +12,8 @@ export class UsersService {
   }
 
   async createUser(name: string, email: string, password: string, role: EUserRole) {
-    await this.superAdminExists();
-    
+    const superAdmin = await this.superAdminExists();
+    if(role === EUserRole.SUPERADMIN && superAdmin) throw new ConflictException('Superadmin already exists');
     return await this.prisma.user.create({
       data: {
         name,
@@ -24,14 +24,15 @@ export class UsersService {
     });
   }
 
-  async superAdminExists(): Promise<void>{
+  async superAdminExists(): Promise<boolean>{
     const superAdmin = await this.prisma.user.findFirst({
       where: {
         role: EUserRole.SUPERADMIN,
       },
     });
-    if(superAdmin) throw new ConflictException('Superadmin already exists');
+    if(superAdmin) return true;
+    return false;
   }
 
-  
+
 }

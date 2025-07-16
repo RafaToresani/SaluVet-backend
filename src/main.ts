@@ -10,6 +10,9 @@ async function bootstrap() {
   const version = configService.get('version');
   app.setGlobalPrefix(`api/${version}`);
   
+  
+
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, 

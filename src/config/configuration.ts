@@ -9,4 +9,10 @@ export default () => ({
     database: process.env.DATABASE_NAME,
     url: process.env.DATABASE_URL
   },
+  version: process.env.VERSION,
+  superAdmin: {
+    name: process.env.SUPERADMIN_NAME,
+    email: process.env.SUPERADMIN_EMAIL,
+    password: process.env.SUPERADMIN_PASSWORD,
+  }
 });
