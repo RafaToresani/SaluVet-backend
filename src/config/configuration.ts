@@ -14,5 +14,9 @@ export default () => ({
     name: process.env.SUPERADMIN_NAME,
     email: process.env.SUPERADMIN_EMAIL,
     password: process.env.SUPERADMIN_PASSWORD,
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    expiresIn: process.env.JWT_EXPIRES_IN,
   }
 });

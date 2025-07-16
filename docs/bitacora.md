@@ -16,6 +16,8 @@
 * Implementé Prisma como ORM, y mysql como motor de base de datos.
 * Implementé class-validator y class-transformer para el correcto uso de los dtos.
 * Creación del módulo User.
+* Creación del Superadmin por defecto.
+* Implementación de JWT y Hasheo de passwords.
 
 ---
 

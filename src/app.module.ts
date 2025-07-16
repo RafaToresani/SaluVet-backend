@@ -5,6 +5,7 @@ import { PrismaService } from './config/prisma/prisma.service';
 import configuration from './config/configuration';
 import { UsersService } from './modules/users/services/users.service';
 import { EUserRole } from 'generated/prisma';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { EUserRole } from 'generated/prisma';
       load: [configuration],
     }),
     UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [PrismaService],
