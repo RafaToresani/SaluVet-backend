@@ -1,10 +1,12 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/modules/users/services/users.service';
 import { RegisterDto } from '../dtos/register.dto';
 import { User } from 'generated/prisma';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from '../dtos/login.dto';
 import * as bcrypt from 'bcrypt';
+import { AuthResponse } from '../dtos/auth.response';
+import { UserResponse } from 'src/modules/users/dto/user.response';
 
 
 @Injectable()
@@ -15,21 +17,27 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ){}
 
-  async login(loginDto: LoginDto){
+  async login(loginDto: LoginDto): Promise<AuthResponse>{
     const user = await this.usersService.findByEmail(loginDto.email);
     if(!user) throw new UnauthorizedException('Credenciales incorrectas');
+    if(!user.isActive) throw new UnauthorizedException('Usuario no activo');
     const isPasswordValid = await bcrypt.compare(loginDto.password, user.password);
     if(!isPasswordValid) throw new UnauthorizedException('Credenciales incorrectas');
     return {
-      message: 'Login exitoso',
-      accessToken: this.generateToken(user),
+      accessToken: await this.generateToken(user),
     }
   }
 
-  async register(registerDto: RegisterDto){
+  async register(registerDto: RegisterDto): Promise<UserResponse>{
+    const existingUser = await this.usersService.findByEmail(registerDto.email);
+    if(existingUser) throw new BadRequestException('El email ya está registrado');
     const user = await this.usersService.createUser(registerDto.name, registerDto.email, registerDto.password, registerDto.role);
+    if(!user) throw new BadRequestException('Error al crear el usuario');
     return {
-      message: 'Usuario creado correctamente',
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isActive: user.isActive,
     }
   }
 

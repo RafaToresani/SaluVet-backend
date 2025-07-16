@@ -17,8 +17,9 @@
 * Implementé class-validator y class-transformer para el correcto uso de los dtos.
 * Creación del módulo User.
 * Creación del Superadmin por defecto.
-* Implementación de JWT y Hasheo de passwords.
-
+* Implementé JWT y Hasheo de passwords.
+* Implementé RoleGuard para proteger rutas por roles.
+* Implementé login y registro de usuarios. El superadmin sólo puede crear usuarios.
 ---
 
 
