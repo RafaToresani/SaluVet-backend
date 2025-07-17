@@ -31,4 +31,6 @@
 * Implementé un endpoint para que el usuario autenticado modifique su nombre, e email.
 * Implementé un endpoint para que el usuario autenticado modifique su contraseña.
 * Implementé un endpoint para que el superadmin pueda modificar la información del resto de los usuarios.
+* Agregué un campo de password por defecto al .env y la configuración global para solicitar el reset de password automático, sólo accesible al superadmin.
+
 
