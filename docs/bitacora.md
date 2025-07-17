@@ -5,6 +5,7 @@
   * HU-01: Creación automática del Superadmin
   * HU-02: Iniciar sesión como Superadmin
   * HU-03: ABM de Recepcionistas y Veterinarios
+  * HU-04: Superadmin puede reestablecer contraseñas.
 
 ## 16/07/2025
 
@@ -32,5 +33,11 @@
 * Implementé un endpoint para que el usuario autenticado modifique su contraseña.
 * Implementé un endpoint para que el superadmin pueda modificar la información del resto de los usuarios.
 * Agregué un campo de password por defecto al .env y la configuración global para solicitar el reset de password automático, sólo accesible al superadmin.
+* Implementé un sistema de loggin para las peticiones con un interceptor.
+* Implementé un sistema para envolver las respuestas exitosas. Utiliza un interceptor.
+* Implementé un filtro para capturar las excepciones, y devolver un objeto con mejor información.
+
+**Finalizé las 4 tareas del primer sprint**
+
 
 

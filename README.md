@@ -43,13 +43,47 @@ NestJS - TypeScript - MySQL - Prisma - Swagger - JWT
 
 ---
 
-## Project setup
+## Variables de entorno
+
+En un archivo llamado ``.env`` copiar y pegar las siguientes variables de entorno.
+```
+NODE_ENV=development
+PORT=7500
+VERSION=v1
+
+#Database
+DATABASE_TYPE=mysql
+DATABASE_HOST=localhost
+DATABASE_PORT=3306
+DATABASE_NAME=saluvet_db
+DATABASE_USERNAME=TuUsuario
+DATABASE_PASSWORD=TuPassword
+DATABASE_URL=${DATABASE_TYPE}://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+
+#JWT
+JWT_SECRET=supersecreto
+JWT_EXPIRES_IN=24h
+
+#Superadmin Credentials
+SUPERADMIN_EMAIL=superadmin@saluvet.com
+SUPERADMIN_PASSWORD=password123
+SUPERADMIN_NAME=superadmin
+
+#ResetPassword
+RESET_PASSWORD_DEFAULT=saluvet123
+
+```
+
+---
+
+## Instalación del proyecto
 
 ```bash
 $ npm install
+$ npx prisma migrate dev
 ```
 
-## Compile and run the project
+## Compilar y correr el proyecto
 
 ```bash
 # development
@@ -61,3 +95,4 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
