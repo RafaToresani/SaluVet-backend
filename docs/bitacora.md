@@ -22,4 +22,8 @@
 * Implementé login y registro de usuarios. El superadmin sólo puede crear usuarios.
 ---
 
+## 17/07/2025
 
+* Moví el registro de usuarios a el módulo users.
+* Modifiqué la búsqueda de users, ahora se puede buscar por email, nombre y rol.
+* Creé un mapper para mapear User a UserResponse

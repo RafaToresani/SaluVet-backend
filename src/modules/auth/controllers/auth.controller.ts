@@ -19,11 +19,11 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
-  @Post('register')
+/*   @Post('register')
   @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtAuthGuard)
   @Roles(EUserRole.SUPERADMIN)
   async register(@Body() registerDto: RegisterDto): Promise<UserResponse>{
     return this.authService.register(registerDto);
-  }
+  } */
 }

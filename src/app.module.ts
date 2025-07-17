@@ -6,6 +6,7 @@ import configuration from './config/configuration';
 import { UsersService } from './modules/users/services/users.service';
 import { EUserRole } from 'generated/prisma';
 import { AuthModule } from './modules/auth/auth.module';
+import { RegisterDto } from './modules/auth/dtos/register.dto';
 
 @Module({
   imports: [
@@ -31,11 +32,13 @@ export class AppModule {
     const superAdmin = await this.usersService.superAdminExists();
     if (superAdmin) return;
 
-    await this.usersService.createUser(
-      this.configService.get('superAdmin.name')!,
-      this.configService.get('superAdmin.email')!,
-      this.configService.get('superAdmin.password')!,
-      EUserRole.SUPERADMIN,
-    );
+    const superAdminRequest:RegisterDto = {
+      name: this.configService.get('superAdmin.name')!,
+      email: this.configService.get('superAdmin.email')!,
+      password: this.configService.get('superAdmin.password')!,
+      role: EUserRole.SUPERADMIN,
+    }
+
+    await this.usersService.createUser(superAdminRequest);
   }
 }

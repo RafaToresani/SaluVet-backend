@@ -28,7 +28,7 @@ export class AuthService {
     }
   }
 
-  async register(registerDto: RegisterDto): Promise<UserResponse>{
+/*   async register(registerDto: RegisterDto): Promise<UserResponse>{
     const existingUser = await this.usersService.findByEmail(registerDto.email);
     if(existingUser) throw new BadRequestException('El email ya está registrado');
     const user = await this.usersService.createUser(registerDto.name, registerDto.email, registerDto.password, registerDto.role);
@@ -39,7 +39,7 @@ export class AuthService {
       role: user.role,
       isActive: user.isActive,
     }
-  }
+  } */
 
   async generateToken(user: User){
     const payload = {
