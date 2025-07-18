@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum EUserRole {
+  SUPERADMIN
+  RECEPCIONISTA
+  VETERINARIO
+}
+
+enum EPetGender {
+  MACHO
+  HEMBRA
+}
+
+enum EPetSpecies {
+  PERRO
+  GATO
+  AVE
+  REPTIL
+  OTRO
+}
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  password  String
+  role      EUserRole @default(RECEPCIONISTA)
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("users")
+}
+
+model Owner {
+  id        String   @id @default(uuid())
+  name      String
+  lastname  String
+  dni       String   @unique
+  email     String?
+  phone     String   @unique
+  address   String
+  pets      Pet[]    @relation("OwnerPets")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("owners")
+}
+
+model Pet {
+  id        String     @id @default(uuid())
+  name      String
+  species   EPetSpecies
+  breed     String
+  birthdate DateTime
+  gender    EPetGender
+  ownerId   String
+  owner     Owner      @relation("OwnerPets", fields: [ownerId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("pets")
+}
