@@ -71,3 +71,5 @@
 * Agregué el modelo de Pet a prisma.
 * Creé el módulo completo de Pet: servicio, controller, dto.
 * Creé un pet.mapper.ts
+* Implementé el partial update de Pet.
+* Implementé paginación

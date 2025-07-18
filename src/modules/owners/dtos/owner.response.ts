@@ -1,3 +1,5 @@
+import { PetResponse } from "src/modules/pets/dtos/pet.response";
+
 export interface OwnerResponse {
   id: string;
   name: string;
@@ -6,4 +8,5 @@ export interface OwnerResponse {
   email?: string;
   phone: string;
   address: string;
+  pets?: PetResponse[];
 }
