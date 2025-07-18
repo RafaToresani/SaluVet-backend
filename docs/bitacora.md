@@ -68,4 +68,6 @@
 * Implementé la creación de Owner, validando de que no se repita el teléfono ni el dni.
 * Implementé owner.response.ts y su respectivo mapper.
 * Arreglé el guard de roles que estaba mal implementado 🤣
-* 
+* Agregué el modelo de Pet a prisma.
+* Creé el módulo completo de Pet: servicio, controller, dto.
+* Creé un pet.mapper.ts

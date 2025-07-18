@@ -5,6 +5,7 @@ import { PetsController } from './controllers/pets.controller';
 
 @Module({
   controllers: [PetsController],
-  providers: [PetsService, PrismaService]
+  providers: [PetsService, PrismaService],
+  exports: [PetsService]
 })
 export class PetsModule {}
