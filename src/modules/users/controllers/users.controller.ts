@@ -3,7 +3,7 @@ import { UsersService } from '../services/users.service';
 import { RegisterDto } from 'src/modules/auth/dtos/register.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/common/guards/auth.guard';
-import { Roles } from 'src/common/guards/role.guard';
+import { Roles } from 'src/common/decorators/role.decorator';
 import { EUserRole } from 'generated/prisma';
 import { UserResponse } from '../dto/user.response';
 import { GetUsersQueryDto } from '../dto/getUsersQueryDto.dto';
@@ -11,6 +11,7 @@ import { UserForUpdateDto } from '../dto/userForUpdateDto.dto';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { UpdatePasswordDto } from '../dto/updatePasswordDto.dto';
 import { UserForUpdateDtoBySuperAdminDto } from '../dto/userForUpdateDtoBySuperAdminDto.dto';
+import { RolesGuard } from 'src/common/guards/roles.guard';
 
 @Controller('users')
 export class UsersController {
@@ -24,7 +25,7 @@ export class UsersController {
   @ApiBody({ type: RegisterDto, description: 'User data' })
   @Post('superadmin/register')
   @ApiBearerAuth('JWT-auth')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(EUserRole.SUPERADMIN)
   createUser(@Body() request:RegisterDto): Promise<UserResponse>{
     return this.usersService.createUser(request);
@@ -62,7 +63,7 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiParam({ name: 'id', description: 'ID del usuario' })
   @ApiBearerAuth('JWT-auth')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(EUserRole.SUPERADMIN)
   toggleActive(@Param('id') id: string): Promise<UserResponse>{
     return this.usersService.toggleActive(id);
@@ -75,7 +76,7 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiParam({ name: 'id', description: 'ID del usuario' })
   @ApiBearerAuth('JWT-auth')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(EUserRole.SUPERADMIN)
   updateUserBySuperadmin(@Param('id') id: string, @Body() request: UserForUpdateDtoBySuperAdminDto): Promise<UserResponse>{
     return this.usersService.updateUserBySuperadmin(id, request);
@@ -88,7 +89,7 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiParam({ name: 'id', description: 'ID del usuario' })
   @ApiBearerAuth('JWT-auth')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(EUserRole.SUPERADMIN)
   changePasswordBySuperadmin(@Param('id') id: string): Promise<UserResponse>{
     return this.usersService.changePasswordBySuperadmin(id);

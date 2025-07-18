@@ -4,7 +4,7 @@ import { LoginDto } from '../dtos/login.dto';
 import { AuthResponse } from '../dtos/auth.response';
 import { RegisterDto } from '../dtos/register.dto';
 import { JwtAuthGuard } from 'src/common/guards/auth.guard';
-import { Roles } from 'src/common/guards/role.guard';
+import { Roles } from 'src/common/decorators/role.decorator';
 import { EUserRole } from 'generated/prisma';
 import { UserResponse } from 'src/modules/users/dto/user.response';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
