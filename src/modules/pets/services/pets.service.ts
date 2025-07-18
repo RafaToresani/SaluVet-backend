@@ -10,6 +10,7 @@ export class PetsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createPet(createPetDto: PetForCreationDto): Promise<PetResponse> {
+    await this.validateOwnerExists(createPetDto.ownerId);
     if(await this.getPetOwnerByName(createPetDto.name, createPetDto.ownerId)) {
       throw new BadRequestException('El dueño ya tiene un mascota con ese nombre');
     }
@@ -29,5 +30,17 @@ export class PetsService {
         ownerId: id,
       },
     });
+  }
+
+
+  async validateOwnerExists(id: string): Promise<void> {
+    const owner = await this.prisma.owner.findUnique({
+      where: {
+        id,
+      },
+    });
+    if(!owner) {
+      throw new BadRequestException('El dueño no existe');
+    }
   }
 }
