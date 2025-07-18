@@ -73,3 +73,4 @@
 * Creé un pet.mapper.ts
 * Implementé el partial update de Pet.
 * Implementé paginación
+* Implementé la búsqueda dinámica por parámetros.
