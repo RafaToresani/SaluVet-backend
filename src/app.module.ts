@@ -8,6 +8,7 @@ import { EUserRole } from 'generated/prisma';
 import { AuthModule } from './modules/auth/auth.module';
 import { RegisterDto } from './modules/auth/dtos/register.dto';
 import { OwnersModule } from './modules/owners/owners.module';
+import { PetsModule } from './modules/pets/pets.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { OwnersModule } from './modules/owners/owners.module';
     UsersModule,
     AuthModule,
     OwnersModule,
+    PetsModule,
   ],
   controllers: [],
   providers: [PrismaService],
