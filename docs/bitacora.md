@@ -74,3 +74,9 @@
 * Implementé el partial update de Pet.
 * Implementé paginación
 * Implementé la búsqueda dinámica por parámetros.
+
+## 19/07/2025
+
+#### Historial de tareas.
+* Implementé los modelos scheduleConfig, y scheduleConfigDay en prisma.
+* Creé modulo de schedule.

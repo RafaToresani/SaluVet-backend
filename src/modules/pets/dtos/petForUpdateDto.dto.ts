@@ -11,8 +11,6 @@ export class PetForUpdateDto{
   @IsString()
   id: string;
 
-  
-
   @ApiProperty({
     description: 'El nombre de la mascota',
     example: 'Firulais',
@@ -23,7 +21,7 @@ export class PetForUpdateDto{
 
   @ApiProperty({
     description: 'La especie de la mascota',
-    example: EPetSpecies.CANINO,
+    example: EPetSpecies.PERRO,
   })
   @IsOptional()
   @IsEnum(EPetSpecies)

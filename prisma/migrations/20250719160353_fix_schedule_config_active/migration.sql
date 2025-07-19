@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `schedule_config_days` ADD COLUMN `isActive` BOOLEAN NOT NULL DEFAULT false,
+    MODIFY `startTime` INTEGER NOT NULL DEFAULT 480,
+    MODIFY `endTime` INTEGER NOT NULL DEFAULT 1080;

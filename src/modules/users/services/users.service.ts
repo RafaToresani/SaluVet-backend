@@ -9,10 +9,15 @@ import { UserForUpdateDto } from '../dto/userForUpdateDto.dto';
 import { UpdatePasswordDto } from '../dto/updatePasswordDto.dto';
 import { UserForUpdateDtoBySuperAdminDto } from '../dto/userForUpdateDtoBySuperAdminDto.dto';
 import { ConfigService } from '@nestjs/config';
+import { ScheduleConfigService } from 'src/modules/schedule/services/schedule-config.service';
 @Injectable()
 export class UsersService {
-  
-  constructor(private readonly prisma: PrismaService, private readonly configService: ConfigService) {}
+
+  constructor(
+    private readonly prisma: PrismaService, 
+    private readonly configService: ConfigService,
+    private readonly scheduleConfigService: ScheduleConfigService
+  ) {}
 
   async getUser(id: string): Promise<UserResponse> {
     const user = await this.prisma.user.findUnique({
@@ -58,6 +63,10 @@ export class UsersService {
         role: request.role,
       },
     });
+
+    if(user.role === EUserRole.VETERINARIO) {
+      await this.scheduleConfigService.initializeScheduleConfig(user.id);
+    }
 
     return userToUserResponse(user);
   }

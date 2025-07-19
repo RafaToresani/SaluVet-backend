@@ -20,4 +20,8 @@ export default () => ({
     expiresIn: process.env.JWT_EXPIRES_IN,
   },
   resetPassword: process.env.RESET_PASSWORD_DEFAULT,
+  scheduleConfig: {
+    startTime: process.env.SCHEDULE_CONFIG_START_TIME ? parseInt(process.env.SCHEDULE_CONFIG_START_TIME, 10) : 9,
+    endTime: process.env.SCHEDULE_CONFIG_END_TIME ? parseInt(process.env.SCHEDULE_CONFIG_END_TIME, 10) : 18,
+  },
 });
