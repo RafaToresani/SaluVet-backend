@@ -9,7 +9,7 @@ import { PetForUpdateDto } from '../dtos/petForUpdateDto.dto';
 @Injectable()
 export class PetsService {
   constructor(private readonly prisma: PrismaService) {}
-
+  
   async createPet(createPetDto: PetForCreationDto): Promise<PetResponse> {
     await this.validateOwnerExists(createPetDto.ownerId);
     if(await this.getPetOwnerByName(createPetDto.name, createPetDto.ownerId)) {
@@ -26,25 +26,25 @@ export class PetsService {
     });
     return petToPetResponse(pet);
   }
-
+  
   async getPetById(id: string): Promise<Pet | null> {
     return await this.prisma.pet.findUnique({
       where: { id },
     });
   }
-
+  
   async updatePet(updatePetDto: PetForUpdateDto): Promise<PetResponse> {
     const { id, ...rest } = updatePetDto;
-  
+    
     const foundPet = await this.getPetById(id);
     if (!foundPet) {
       throw new BadRequestException('La mascota no existe');
     }
-
+    
     if(updatePetDto.birthdate && updatePetDto.birthdate > new Date()) {
       throw new BadRequestException('La fecha de nacimiento no puede ser en el futuro');
     }
-
+    
     const data: Partial<PetForUpdateDto> = {};
     for (const key in rest) {
       if (rest[key] !== undefined) {
@@ -55,11 +55,11 @@ export class PetsService {
       where: { id },
       data,
     });
-  
+    
     return petToPetResponse(updatedPet);
   }
   
-
+  
   async getPetOwnerByName(name: string, id: string): Promise<Pet | null> {
     return await this.prisma.pet.findFirst({
       where: {
@@ -68,8 +68,15 @@ export class PetsService {
       },
     });
   }
-
-
+  
+  async deletePet(id: string): Promise<void> {
+    const petToDelete = await this.getPetById(id);
+    if (!petToDelete) throw new BadRequestException('La mascota no existe.');
+    await this.prisma.pet.delete({
+      where: { id },
+    });
+  }
+  
   async validateOwnerExists(id: string): Promise<void> {
     const owner = await this.prisma.owner.findUnique({
       where: {

@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { PetsService } from '../services/pets.service';
 import { PetForCreationDto } from '../dtos/petForCreationDto.dto';
 import { PetResponse } from '../dtos/pet.response';
@@ -34,5 +34,16 @@ export class PetsController {
   @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN)
   async updatePet(@Body() updatePetDto: PetForUpdateDto): Promise<PetResponse> {
     return await this.petsService.updatePet(updatePetDto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Eliminar una mascota' })
+  @ApiResponse({ status: 200, description: 'Mascota eliminada exitosamente' })
+  @ApiResponse({ status: 404, description: 'Mascota no encontrada' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN)
+  async deletePet(@Param('id') id: string): Promise<void> {
+    return await this.petsService.deletePet(id);
   }
 }
