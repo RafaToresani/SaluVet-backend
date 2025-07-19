@@ -80,3 +80,5 @@
 #### Historial de tareas.
 * Implementé los modelos scheduleConfig, y scheduleConfigDay en prisma.
 * Creé modulo de schedule.
+* Actualicé Historias de usuario.
+* Implementé getScheduleConfig
