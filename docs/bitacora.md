@@ -74,3 +74,9 @@
 * Implementé el partial update de Pet.
 * Implementé paginación
 * Implementé la búsqueda dinámica por parámetros.
+
+## 19/07/2025
+
+### Tercer Sprint
+
+#### Historial de tareas.

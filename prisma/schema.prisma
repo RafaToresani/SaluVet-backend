@@ -27,18 +27,32 @@ enum EPetSpecies {
   OTRO
 }
 
-model User {
-  id        String    @id @default(uuid())
-  name      String
-  email     String    @unique
-  password  String
-  role      EUserRole @default(RECEPCIONISTA)
-  isActive  Boolean   @default(true)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+enum EScheduleConfigDay {
+  LUNES
+  MARTES
+  MIERCOLES
+  JUEVES
+  VIERNES
+  SABADO
+  DOMINGO
+}
 
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  password  String
+  role      EUserRole  @default(RECEPCIONISTA)
+  isActive  Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // Relación inversa (opcional)
+  scheduleConfig ScheduleConfig?
+  
   @@map("users")
 }
+
 
 model Owner {
   id        String   @id @default(uuid())
@@ -68,4 +82,27 @@ model Pet {
   updatedAt DateTime   @updatedAt
 
   @@map("pets")
+}
+
+
+model ScheduleConfig {
+  id        Int       @id @default(autoincrement())
+  vetId     String    @unique
+  vet       User      @relation(fields: [vetId], references: [id])
+  days      ScheduleConfigDay[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("schedule_configs")
+}
+
+model ScheduleConfigDay {
+  id         Int               @id @default(autoincrement())
+  scheduleId Int
+  weekday    EScheduleConfigDay       
+  startTime  Int               
+  endTime    Int               
+  schedule   ScheduleConfig    @relation(fields: [scheduleId], references: [id])
+  @@map("schedule_config_days")
+  @@unique([scheduleId, weekday])
 }

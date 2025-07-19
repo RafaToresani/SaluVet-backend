@@ -23,7 +23,7 @@
 * **HU-06:** Como Recepcionista, quiero editar la información de los dueños, para corregir o actualizar datos.
 * **HU-07:** Como Recepcionista, quiero registrar nuevas mascotas asociadas a un dueño, para tener el control de los pacientes.
 * **HU-08:** Como Recepcionista, quiero editar los datos de las mascotas, para corregir información cuando sea necesario.
-* **HU-9A:** Como Recepcionista, quiero crear turnos para mascotas con veterinarios específicos, para organizar la agenda médica.
+* **HU-09:** Como Recepcionista, quiero crear turnos para mascotas con veterinarios específicos, para organizar la agenda médica.
 * **HU-10:** Como Recepcionista, quiero validar que no haya solapamientos al crear un turno, para evitar errores en la planificación.
 * **HU-11:** Como Recepcionista, quiero poder cancelar o reprogramar turnos, para gestionar cambios de agenda.
 * **HU-12:** Como Recepcionista, quiero ver la lista de turnos del día, ordenados por horario, para organizar mi trabajo.
@@ -39,3 +39,4 @@
 * **HU-16:** Como Veterinario, quiero editar o actualizar consultas ya registradas, para corregir errores o agregar información adicional.
 * **HU-17:** Como Veterinario, quiero registrar vacunas aplicadas a una mascota, para llevar un control de vacunación.
 * **HU-18:** Como Veterinario, quiero consultar el historial completo de consultas y vacunas de una mascota, para tener contexto clínico completo antes de atender.
+
