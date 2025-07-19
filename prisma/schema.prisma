@@ -27,7 +27,7 @@ enum EPetSpecies {
   OTRO
 }
 
-enum EScheduleConfigDay {
+enum EWeekDay {
   LUNES
   MARTES
   MIERCOLES
@@ -99,9 +99,10 @@ model ScheduleConfig {
 model ScheduleConfigDay {
   id         Int               @id @default(autoincrement())
   scheduleId Int
-  weekday    EScheduleConfigDay       
-  startTime  Int               
-  endTime    Int               
+  weekday    EWeekDay       
+  startTime  Int               @default(480) // 8:00
+  endTime    Int               @default(1080) // 18:00
+  isActive   Boolean           @default(false)
   schedule   ScheduleConfig    @relation(fields: [scheduleId], references: [id])
   @@map("schedule_config_days")
   @@unique([scheduleId, weekday])

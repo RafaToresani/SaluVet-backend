@@ -9,6 +9,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { RegisterDto } from './modules/auth/dtos/register.dto';
 import { OwnersModule } from './modules/owners/owners.module';
 import { PetsModule } from './modules/pets/pets.module';
+import { ScheduleModule } from './modules/schedule/schedule.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { PetsModule } from './modules/pets/pets.module';
     AuthModule,
     OwnersModule,
     PetsModule,
+    ScheduleModule,
   ],
   controllers: [],
   providers: [PrismaService],

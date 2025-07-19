@@ -77,6 +77,6 @@
 
 ## 19/07/2025
 
-### Tercer Sprint
-
 #### Historial de tareas.
+* Implementé los modelos scheduleConfig, y scheduleConfigDay en prisma.
+* Creé modulo de schedule.

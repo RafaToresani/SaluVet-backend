@@ -23,7 +23,7 @@ export class PetForUpdateDto{
 
   @ApiProperty({
     description: 'La especie de la mascota',
-    example: EPetSpecies.CANINO,
+    example: EPetSpecies.PERRO,
   })
   @IsOptional()
   @IsEnum(EPetSpecies)
