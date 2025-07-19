@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { EWeekDay, ScheduleConfig } from 'generated/prisma';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { ScheduleConfigDayService } from './schedule-config-day.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ScheduleConfigService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly scheduleConfigDayService: ScheduleConfigDayService
+    private readonly scheduleConfigDayService: ScheduleConfigDayService,
+    private readonly configService: ConfigService
   ) {}
 
   async initializeScheduleConfig(vetId: string): Promise<ScheduleConfig> {
@@ -19,8 +21,8 @@ export class ScheduleConfigService {
       const daysData = Object.values(EWeekDay).map((weekday) => ({
         scheduleId: scheduleConfig.id,
         weekday,
-        startTime: 9 * 60,   // 9:00 AM en minutos
-        endTime: 18 * 60,    // 6:00 PM en minutos
+        startTime: this.configService.get('scheduleConfig.startTime')*60,
+        endTime: this.configService.get('scheduleConfig.endTime')*60,
       }));
   
       await Promise.all(
@@ -36,5 +38,5 @@ export class ScheduleConfigService {
       return fullScheduleConfig!;
     });
   }
-  
+
 }

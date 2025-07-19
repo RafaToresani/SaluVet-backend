@@ -11,8 +11,6 @@ export class PetForUpdateDto{
   @IsString()
   id: string;
 
-  
-
   @ApiProperty({
     description: 'El nombre de la mascota',
     example: 'Firulais',
