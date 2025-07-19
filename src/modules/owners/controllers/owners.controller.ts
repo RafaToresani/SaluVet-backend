@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OwnersService } from '../services/owners.service';
 import { OwnerForCreationDto } from '../dtos/ownerForCreationDto.dto';
@@ -33,8 +33,8 @@ export class OwnersController {
   @ApiResponse({ status: 200, description: 'Dueños encontrados exitosamente' })
   @ApiResponse({ status: 400, description: 'Error al buscar los dueños' })
   @ApiBearerAuth('JWT-auth')
-/*   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN) */
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN)
   async searchOwners(@Query() query: MetaQueryDto): Promise<PaginatedResponse<OwnerResponse>> {
     return await this.ownersService.searchOwners(query);
   }
@@ -48,5 +48,16 @@ export class OwnersController {
   @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN)
   async updateOwner(@Body() owner: OwnerForUpdateDto): Promise<OwnerResponse> {
     return await this.ownersService.updateOwner(owner);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Eliminar un dueño' })
+  @ApiResponse({ status: 200, description: 'Dueño eliminado exitosamente' })
+  @ApiResponse({ status: 404, description: 'Dueño no encontrado' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN)
+  async deleteOwner(@Param('id') id: string): Promise<void> {
+    return await this.ownersService.deleteOwner(id);
   }
 }

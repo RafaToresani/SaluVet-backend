@@ -82,3 +82,4 @@
 * Creé modulo de schedule.
 * Actualicé Historias de usuario.
 * Implementé getScheduleConfig
+* Implementé UpdateScheduleConfig, con sus validaciones.
