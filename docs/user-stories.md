@@ -29,7 +29,7 @@
 * **HU-12:** Como Recepcionista, quiero ver la lista de turnos del día, ordenados por horario, para organizar mi trabajo.
 * **HU-13:** Como Recepcionista, quiero buscar dueños por nombre o teléfono y ver sus mascotas asociadas, para acceder rápidamente a la información necesaria.
 * **HU-19** (opcional): Como Recepcionista, quiero ver el historial de turnos de una mascota, para responder consultas de los dueños.
-
+* **HU-20** : Como Superadmin, quiero inicializar automáticamente la agenda semanal de un veterinario al crearlo, para que esté listo para asignar turnos.
 ---
 
 ### 👨‍⚕️ Veterinario
@@ -39,4 +39,5 @@
 * **HU-16:** Como Veterinario, quiero editar o actualizar consultas ya registradas, para corregir errores o agregar información adicional.
 * **HU-17:** Como Veterinario, quiero registrar vacunas aplicadas a una mascota, para llevar un control de vacunación.
 * **HU-18:** Como Veterinario, quiero consultar el historial completo de consultas y vacunas de una mascota, para tener contexto clínico completo antes de atender.
-
+* **HU-21**: Como Veterinario, quiero poder ver mi agenda semanal (días y horarios), para conocer mi disponibilidad.
+* **HU-22**: Como Veterinario, quiero modificar los horarios disponibles por día de la semana, para adaptar la agenda a mis horarios reales.

@@ -86,7 +86,7 @@ model Pet {
 
 
 model ScheduleConfig {
-  id        Int       @id @default(autoincrement())
+  id        String       @id @default(uuid())
   vetId     String    @unique
   vet       User      @relation(fields: [vetId], references: [id])
   days      ScheduleConfigDay[]
@@ -97,8 +97,8 @@ model ScheduleConfig {
 }
 
 model ScheduleConfigDay {
-  id         Int               @id @default(autoincrement())
-  scheduleId Int
+  id         String               @id @default(uuid())
+  scheduleId String
   weekday    EWeekDay       
   startTime  Int               @default(480) // 8:00
   endTime    Int               @default(1080) // 18:00
