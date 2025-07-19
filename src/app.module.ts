@@ -10,6 +10,7 @@ import { RegisterDto } from './modules/auth/dtos/register.dto';
 import { OwnersModule } from './modules/owners/owners.module';
 import { PetsModule } from './modules/pets/pets.module';
 import { ScheduleModule } from './modules/schedule/schedule.module';
+import { ClinicalServicesModule } from './modules/clinical-services/clinical-services.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ScheduleModule } from './modules/schedule/schedule.module';
     OwnersModule,
     PetsModule,
     ScheduleModule,
+    ClinicalServicesModule,
   ],
   controllers: [],
   providers: [PrismaService],

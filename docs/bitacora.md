@@ -2,11 +2,10 @@
 ---
 ## 16/07/2025
 
-### Primer Sprint
-#### Objetivo: 
+### Objetivo: 
   * Establecer la base del sistema con autenticación segura, control de acceso por roles y gestión inicial de usuarios. Incluir la creación automática del Superadmin, login con JWT, protección de rutas por roles, y ABM de usuarios (recepcionistas y veterinarios), junto con herramientas de infraestructura como manejo de variables de entorno, validaciones de DTOs, y estructura de respuestas y errores.
 
-#### Historias de usuario:
+#### Historias de usuario resueltas:
   * HU-01: Creación automática del Superadmin
   * HU-02: Iniciar sesión como Superadmin
   * HU-03: ABM de Recepcionistas y Veterinarios
@@ -42,16 +41,15 @@
 * Implementé un sistema para envolver las respuestas exitosas. Utiliza un interceptor.
 * Implementé un filtro para capturar las excepciones, y devolver un objeto con mejor información.
 
-**Finalizé las 4 tareas del primer sprint**
+**Finalicé las 4 tareas**
 ---
 
 ## 18/07/2025
 
-### Segundo Sprint
-#### 🎯Objetivo:
+### 🎯Objetivo:
   * Dejar implementadas las funcionalidades básicas para el manejo de dueños y mascotas, incluyendo ABM y búsquedas, de modo que luego pueda asociarlos fácilmente a turnos y consultas.
 
-#### Historias de usuario:
+#### Historias de usuario resueltas:
   * HU-05: Registrar nuevos dueños.
   * HU-06: Editar info de dueños.
   * HU-07: Registrar mascotas asociadas a un dueño.
@@ -75,7 +73,15 @@
 * Implementé paginación
 * Implementé la búsqueda dinámica por parámetros.
 
+**Finalicé las 3 tareas**
+---
+
 ## 19/07/2025
+
+#### Historias de usuario resueltas:
+* HU-20: Inicializar schedule.
+* HU-21: Obtener schedule con su config.
+* HU-22: Actualizar Schedule.
 
 #### Historial de tareas.
 * Implementé los modelos scheduleConfig, y scheduleConfigDay en prisma.
@@ -83,3 +89,10 @@
 * Actualicé Historias de usuario.
 * Implementé getScheduleConfig
 * Implementé UpdateScheduleConfig, con sus validaciones.
+* Completé el crud de pet
+* Agregué la eliminación de owner.
+* Implementé Clinical Service en prisma.
+* Creé módulo de servicios clínicos.
+---
+
+
