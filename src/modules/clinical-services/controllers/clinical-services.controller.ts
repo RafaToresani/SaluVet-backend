@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { ClinicalServicesService } from '../services/clinical-services.service';
 import { ClinicalServiceForCreationDto } from '../dto/clinicalServiceForCreationDto.dto';
 import { ClinicalServiceResponse } from '../dto/clinical-service.response';
@@ -7,6 +7,7 @@ import { JwtAuthGuard } from 'src/common/guards/auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { EUserRole } from 'generated/prisma';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ClinicalServiceForUpdateDto } from '../dto/clinicalServiceForUpdateDto.dto';
 
 @Controller('clinical-services')
 export class ClinicalServicesController {
@@ -30,5 +31,16 @@ export class ClinicalServicesController {
   @UseGuards(JwtAuthGuard)
   async getAllClinicalServices(): Promise<ClinicalServiceResponse[]> {
     return this.clinicalServicesService.getAllClinicalServices();
+  }
+
+  @Patch()
+  @ApiOperation({ summary: 'Actualizar un servicio clínico' })
+  @ApiResponse({ status: 200, description: 'Servicio clínico actualizado exitosamente' })
+  @ApiResponse({ status: 400, description: 'Error al actualizar el servicio clínico' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(EUserRole.SUPERADMIN)
+  async updateClinicalService(@Body() request: ClinicalServiceForUpdateDto): Promise<ClinicalServiceResponse> {
+    return this.clinicalServicesService.updateClinicalService(request);
   }
 }
