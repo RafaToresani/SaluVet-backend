@@ -40,7 +40,7 @@
 * **HU-15:** Como Veterinario, quiero registrar consultas médicas (diagnóstico, tratamiento, notas) para las mascotas que atendí, para mantener el historial clínico actualizado.
 * **HU-16:** Como Veterinario, quiero editar o actualizar consultas ya registradas, para corregir errores o agregar información adicional.
 * **HU-17:** Como Veterinario, quiero registrar vacunas aplicadas a una mascota, para llevar un control de vacunación.
-* **HU-18:** Como Veterinario, quiero consultar el historial completo de consultas y vacunas de una mascota, para tener contexto clínico completo antes de atender.
+* **HU-18:** Como Veterinario, quiero consultar el historial clínico y vacunas de una mascota, para tener contexto clínico completo antes de atender.
 * **HU-21**: Como Veterinario, quiero poder ver mi agenda semanal (días y horarios), para conocer mi disponibilidad.
 * **HU-22**: Como Veterinario, quiero modificar los horarios disponibles por día de la semana, para adaptar la agenda a mis horarios reales.
 * **HU-25**: Como Veterinario, quiero ver el servicio asociado a cada turno, para saber con qué prepararme antes de atender al paciente.
