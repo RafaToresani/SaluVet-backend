@@ -104,7 +104,7 @@
 
 #### Historias de usuario:
 * HU-09: Crear turnos para mascotas con veterinarios específicos
-* HU-11: Cancelar o reprogramar turnos
+* HU-11: Reprogramar turno
 * HU-12: Ver lista de turnos del día
 
 
@@ -116,5 +116,5 @@
 * Implementé la creación de turnos con sus validaciones.
 * Creé appointment response y su mapper.
 * Implementé endpoint getAppointmentsByDate
-
+* Implementé endpoint de reprogramar turno.
 

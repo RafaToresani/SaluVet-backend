@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { AppointmentsService } from '../services/appointments.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AppointmentForCreationDto } from '../dtos/appointmentForCreationDto.dto';
@@ -7,6 +7,8 @@ import { RolesGuard } from 'src/common/guards/roles.guard';
 import { EUserRole } from 'generated/prisma';
 import { Roles } from 'src/common/decorators/role.decorator';
 import { UseGuards } from '@nestjs/common';
+import { RescheduleAppointmentDto } from '../dtos/rescheduleAppointmentDto.dto';
+import { AppointmentResponse } from '../dtos/appointment.response';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -23,7 +25,7 @@ export class AppointmentsController {
   @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN)
-  async createAppointment(@Body() appointmentDto: AppointmentForCreationDto) {
+  createAppointment(@Body() appointmentDto: AppointmentForCreationDto) {
     return this.appointmentsService.createAppointment(appointmentDto);
   }
 
@@ -38,9 +40,22 @@ export class AppointmentsController {
   @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN)
-  async getAppointmentsByDate(@Query('date') date: Date) {
+  getAppointmentsByDate(@Query('date') date: Date) {
     return this.appointmentsService.getAppointmentsByDate(date);
   }
 
-  
+  @Patch(':id')
+  @ApiOperation({ summary: 'Reprogramar una cita' })
+  @ApiResponse({ status: 200, description: 'Cita reprogramada exitosamente' })
+  @ApiResponse({ status: 400, description: 'Error al reprogramar la cita' })
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'No encontrado' })
+  @ApiResponse({ status: 500, description: 'Error interno del servidor' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN)
+  rescheduleAppointment(@Param('id') id: string, @Body() rescheduleDto: RescheduleAppointmentDto): Promise<AppointmentResponse> {
+    return this.appointmentsService.rescheduleAppointment(id, rescheduleDto);
+  }
 }

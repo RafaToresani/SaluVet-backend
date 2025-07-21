@@ -23,6 +23,7 @@ import { ClinicalServicesService } from 'src/modules/clinical-services/services/
 import { ScheduleConfigService } from 'src/modules/schedule/services/schedule-config.service';
 import { AppointmentResponse } from '../dtos/appointment.response';
 import { appointmentToAppointmentResponse } from 'src/common/mappers/appointments.mappers';
+import { RescheduleAppointmentDto } from '../dtos/rescheduleAppointmentDto.dto';
 
 @Injectable()
 export class AppointmentsService {
@@ -34,7 +35,9 @@ export class AppointmentsService {
     private readonly scheduleConfigService: ScheduleConfigService,
   ) {}
 
-  async createAppointment(request: AppointmentForCreationDto): Promise<AppointmentResponse> {
+  async createAppointment(
+    request: AppointmentForCreationDto,
+  ): Promise<AppointmentResponse> {
     const {
       petId,
       vetId,
@@ -132,6 +135,82 @@ export class AppointmentsService {
     return await this.getAppointmentById(appointment.id);
   }
 
+  async rescheduleAppointment(
+    id: string,
+    request: RescheduleAppointmentDto,
+  ): Promise<AppointmentResponse> {
+    const { newDate, newStartTime } = request;
+    if (!newDate && !newStartTime)
+      throw new BadRequestException('Debe enviar al menos una modificación');
+
+    const appointment = await this.prisma.appointment.findUnique({
+      where: { id },
+      include: {
+        services: {
+          include: { clinicalService: true },
+        },
+      },
+    });
+
+    if (!appointment) throw new NotFoundException('Turno no encontrado');
+
+    if (appointment.status === EAppointmentStatus.CANCELADO)
+      throw new BadRequestException(
+        'No se puede reprogramar un turno cancelado',
+      );
+    const finalDate = newDate ?? appointment.date;
+    const finalStartTime = newStartTime ?? appointment.startTime;
+    const vetId = appointment.vetId;
+    const duration = appointment.duration;
+
+    if (finalDate < new Date())
+      throw new BadRequestException('No se puede reprogramar al pasado');
+
+    const scheduleConfig =
+      await this.scheduleConfigService.getScheduleConfigByVetId(vetId);
+    if (!scheduleConfig)
+      throw new NotFoundException('Configuración de agenda no encontrada');
+
+    this.validateAvailability(
+      scheduleConfig,
+      finalDate,
+      finalStartTime,
+      duration,
+    );
+
+    await this.validateNoOverlap(
+      vetId,
+      finalDate,
+      finalStartTime,
+      duration,
+    );
+
+    const updated = await this.prisma.appointment.update({
+      where: { id },
+      data: {
+        date: finalDate,
+        startTime: finalStartTime,
+      },
+      include: {
+        vet: true,
+        pet: {
+          include: {
+            owner: true,
+          },
+        },
+        services: {
+          include: {
+            clinicalService: true,
+          },
+        },
+      },
+    });
+
+    if (!updated) throw new NotFoundException('Error al reprogramar la cita');
+
+    return await this.getAppointmentById(updated.id);
+  }
+
   async getAppointmentById(id: string): Promise<AppointmentResponse> {
     const appointment = await this.prisma.appointment.findUnique({
       where: { id },
@@ -150,13 +229,15 @@ export class AppointmentsService {
       },
     });
     if (!appointment) throw new NotFoundException('Cita no encontrada');
-    return appointmentToAppointmentResponse(appointment as Appointment & {
-      vet: User;
-      pet: Pet & { owner: Owner };
-      services: {
-        clinicalService: ClinicalService;
-      }[];
-    });
+    return appointmentToAppointmentResponse(
+      appointment as Appointment & {
+        vet: User;
+        pet: Pet & { owner: Owner };
+        services: {
+          clinicalService: ClinicalService;
+        }[];
+      },
+    );
   }
 
   async getAppointmentsByDate(dateStr: Date): Promise<AppointmentResponse[]> {
