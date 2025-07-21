@@ -54,7 +54,7 @@ export class ClinicalServicesService {
     }
 
     const existsByName = await this.getClinicalServiceByName(request.name!);
-    if (existsByName) {
+    if (existsByName && existsByName.id !== request.id) {
       throw new BadRequestException(
         'El nombre del servicio no está disponible',
       );
