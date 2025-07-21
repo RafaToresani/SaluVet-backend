@@ -14,6 +14,7 @@
 * **HU-02:** Como Superadmin, quiero poder iniciar sesión en el sistema, para acceder a mis funciones autorizadas.
 * **HU-03:** Como Superadmin, quiero crear, editar, listar y desactivar usuarios recepcionistas y veterinario, para gestionar al personal de recepción y de veterinaria.
 * **HU-04:** Como Superadmin, quiero poder resetear la contraseña de un usuario, para asistir en casos de bloqueo o pérdida.
+* **HU-23**: Como Superadmin, quiero crear, editar, listar y eliminar los servicios que ofrece la clínica (como consultas, vacunación, etc.), para mantener actualizado el catálogo.
 
 ---
 
@@ -30,6 +31,7 @@
 * **HU-13:** Como Recepcionista, quiero buscar dueños por nombre o teléfono y ver sus mascotas asociadas, para acceder rápidamente a la información necesaria.
 * **HU-19** (opcional): Como Recepcionista, quiero ver el historial de turnos de una mascota, para responder consultas de los dueños.
 * **HU-20** : Como Superadmin, quiero inicializar automáticamente la agenda semanal de un veterinario al crearlo, para que esté listo para asignar turnos.
+* **HU-24**: Como Recepcionista, quiero seleccionar un servicio al crear un turno, para que el veterinario sepa qué procedimiento debe realizar.
 ---
 
 ### 👨‍⚕️ Veterinario
@@ -41,3 +43,4 @@
 * **HU-18:** Como Veterinario, quiero consultar el historial completo de consultas y vacunas de una mascota, para tener contexto clínico completo antes de atender.
 * **HU-21**: Como Veterinario, quiero poder ver mi agenda semanal (días y horarios), para conocer mi disponibilidad.
 * **HU-22**: Como Veterinario, quiero modificar los horarios disponibles por día de la semana, para adaptar la agenda a mis horarios reales.
+* **HU-25**: Como Veterinario, quiero ver el servicio asociado a cada turno, para saber con qué prepararme antes de atender al paciente.

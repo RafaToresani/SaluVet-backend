@@ -1,0 +1,100 @@
+[
+  {
+    "name": "Consulta general",
+    "description": "Revisión clínica y diagnóstico general del paciente.",
+    "price": 1000,
+    "duration": 30,
+    "isActive": true
+  },
+  {
+    "name": "Consulta especializada",
+    "description": "Consulta con enfoque en una especialidad como dermatología o cardiología.",
+    "price": 1500,
+    "duration": 45,
+    "isActive": true
+  },
+  {
+    "name": "Control postoperatorio",
+    "description": "Seguimiento y control luego de una intervención quirúrgica.",
+    "price": 900,
+    "duration": 20,
+    "isActive": true
+  },
+  {
+    "name": "Vacunación anual",
+    "description": "Aplicación de vacunas anuales obligatorias.",
+    "price": 800,
+    "duration": 15,
+    "isActive": true
+  },
+  {
+    "name": "Vacunación refuerzo",
+    "description": "Refuerzo de vacunas previamente aplicadas.",
+    "price": 700,
+    "duration": 15,
+    "isActive": true
+  },
+  {
+    "name": "Desparasitación interna",
+    "description": "Tratamiento antiparasitario para parásitos internos.",
+    "price": 600,
+    "duration": 15,
+    "isActive": true
+  },
+  {
+    "name": "Desparasitación externa",
+    "description": "Tratamiento antiparasitario contra pulgas, garrapatas u otros.",
+    "price": 600,
+    "duration": 15,
+    "isActive": true
+  },
+  {
+    "name": "Castración macho",
+    "description": "Procedimiento quirúrgico de esterilización para machos.",
+    "price": 4500,
+    "duration": 60,
+    "isActive": true
+  },
+  {
+    "name": "Castración hembra",
+    "description": "Procedimiento quirúrgico de esterilización para hembras.",
+    "price": 5500,
+    "duration": 90,
+    "isActive": true
+  },
+  {
+    "name": "Cirugía menor",
+    "description": "Intervenciones quirúrgicas simples como extracción de masas pequeñas.",
+    "price": 3000,
+    "duration": 60,
+    "isActive": true
+  },
+  {
+    "name": "Cirugía mayor",
+    "description": "Procedimientos quirúrgicos complejos que requieren mayor tiempo y recuperación.",
+    "price": 8000,
+    "duration": 120,
+    "isActive": true
+  },
+  {
+    "name": "Radiografía",
+    "description": "Estudio por imagen mediante rayos X.",
+    "price": 2000,
+    "duration": 30,
+    "isActive": true
+  },
+  {
+    "name": "Ecografía",
+    "description": "Diagnóstico por imagen mediante ultrasonido.",
+    "price": 2500,
+    "duration": 30,
+    "isActive": true
+  },
+  {
+    "name": "Análisis de laboratorio",
+    "description": "Extracción y análisis de muestras (sangre, orina, etc.).",
+    "price": 1800,
+    "duration": 30,
+    "isActive": true
+  }
+]
