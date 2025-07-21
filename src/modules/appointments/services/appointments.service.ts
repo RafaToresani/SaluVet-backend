@@ -8,15 +8,21 @@ import { AppointmentForCreationDto } from '../dtos/appointmentForCreationDto.dto
 import { PetsService } from 'src/modules/pets/services/pets.service';
 import { UsersService } from 'src/modules/users/services/users.service';
 import {
+  Appointment,
   ClinicalService,
   EAppointmentStatus,
   EUserRole,
   EWeekDay,
+  Owner,
+  Pet,
   ScheduleConfig,
   ScheduleConfigDay,
+  User,
 } from 'generated/prisma';
 import { ClinicalServicesService } from 'src/modules/clinical-services/services/clinical-services.service';
 import { ScheduleConfigService } from 'src/modules/schedule/services/schedule-config.service';
+import { AppointmentResponse } from '../dtos/appointment.response';
+import { appointmentToAppointmentResponse } from 'src/common/mappers/appointments.mappers';
 
 @Injectable()
 export class AppointmentsService {
@@ -28,7 +34,7 @@ export class AppointmentsService {
     private readonly scheduleConfigService: ScheduleConfigService,
   ) {}
 
-  async createAppointment(request: AppointmentForCreationDto) {
+  async createAppointment(request: AppointmentForCreationDto): Promise<AppointmentResponse> {
     const {
       petId,
       vetId,
@@ -121,7 +127,80 @@ export class AppointmentsService {
       return createdAppointment;
     });
 
-    return appointment;
+    if (!appointment) throw new NotFoundException('Error al crear la cita');
+
+    return await this.getAppointmentById(appointment.id);
+  }
+
+  async getAppointmentById(id: string): Promise<AppointmentResponse> {
+    const appointment = await this.prisma.appointment.findUnique({
+      where: { id },
+      include: {
+        vet: true,
+        pet: {
+          include: {
+            owner: true,
+          },
+        },
+        services: {
+          include: {
+            clinicalService: true,
+          },
+        },
+      },
+    });
+    if (!appointment) throw new NotFoundException('Cita no encontrada');
+    return appointmentToAppointmentResponse(appointment as Appointment & {
+      vet: User;
+      pet: Pet & { owner: Owner };
+      services: {
+        clinicalService: ClinicalService;
+      }[];
+    });
+  }
+
+  async getAppointmentsByDate(dateStr: Date): Promise<AppointmentResponse[]> {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) {
+      throw new BadRequestException('Fecha inválida');
+    }
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999);
+    const appointments = await this.prisma.appointment.findMany({
+      where: {
+        date: {
+          gte: start,
+          lte: end,
+        },
+      },
+      include: {
+        vet: true,
+        pet: {
+          include: {
+            owner: true,
+          },
+        },
+        services: {
+          include: {
+            clinicalService: true,
+          },
+        },
+      },
+    });
+    return appointments.map((appointment) =>
+      appointmentToAppointmentResponse(
+        appointment as Appointment & {
+          vet: User;
+          pet: Pet & { owner: Owner };
+          services: {
+            clinicalService: ClinicalService;
+          }[];
+        },
+      ),
+    );
   }
 
   private validateAvailability(

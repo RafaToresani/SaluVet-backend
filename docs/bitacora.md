@@ -113,4 +113,6 @@
 * Modifiqué las Historias de usuario 🥴
 * Implementé model de appointment en prisma.
 * Implementé modulo de appointments
+* Implementé la creación de turnos con sus validaciones.
+
 
