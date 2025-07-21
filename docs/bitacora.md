@@ -1,6 +1,6 @@
 # Bitácora del proyecto.
 ---
-***HU Realizadas:*** 01 - 02 - 03 - 04 - 05 - 06 - 07 - 08 - 13 - 20 - 21 - 22 - 23
+***HU Realizadas:*** 01 - 02 - 03 - 04 - 05 - 06 - 07 - 08 - 13 - 20 - 21 - 22 - 23 - 09 - 11 - 12
 ---
 ## 16/07/2025
 
@@ -106,7 +106,7 @@
 * HU-09: Crear turnos para mascotas con veterinarios específicos
 * HU-11: Reprogramar turno
 * HU-12: Ver lista de turnos del día
-
+* HU-19: Ver historial de citas de una mascota.
 
 #### Historias de tareas.
 * Implementé deleteClinicalService.
@@ -117,4 +117,6 @@
 * Creé appointment response y su mapper.
 * Implementé endpoint getAppointmentsByDate
 * Implementé endpoint de reprogramar turno.
-
+* Implementé el endpoint de cambiar estado de cita.
+* Implementé el endpoint de traer el historial de citas de una mascota.
+* Implementé el endpoint para que el veterinario consulte sus citas del día.

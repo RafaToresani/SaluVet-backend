@@ -9,6 +9,7 @@ import { Roles } from 'src/common/decorators/role.decorator';
 import { UseGuards } from '@nestjs/common';
 import { RescheduleAppointmentDto } from '../dtos/rescheduleAppointmentDto.dto';
 import { AppointmentResponse } from '../dtos/appointment.response';
+import { UserId } from 'src/common/decorators/user-id.decorator';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -44,6 +45,36 @@ export class AppointmentsController {
     return this.appointmentsService.getAppointmentsByDate(date);
   }
 
+  @Get('by-pet/:petId')
+  @ApiOperation({ summary: 'Buscar citas por ID de mascota' })
+  @ApiResponse({ status: 200, description: 'Citas encontradas exitosamente' })
+  @ApiResponse({ status: 400, description: 'Error al buscar las citas' })
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'No encontrado' })
+  @ApiResponse({ status: 500, description: 'Error interno del servidor' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN)
+  getAppointmentsByPetId(@Param('petId') petId: string): Promise<AppointmentResponse[]> {
+    return this.appointmentsService.getAppointmentsByPetId(petId);
+  }
+
+  @Get('by-vet/my')
+  @ApiOperation({ summary: 'Buscar citas del veterinario del día' })
+  @ApiResponse({ status: 200, description: 'Citas encontradas exitosamente' })
+  @ApiResponse({ status: 400, description: 'Error al buscar las citas' })
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'No encontrado' })
+  @ApiResponse({ status: 500, description: 'Error interno del servidor' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(EUserRole.VETERINARIO)
+  getAppointmentsByVetId(@UserId() vetId: string, @Query('date') date: Date): Promise<AppointmentResponse[]> {
+    return this.appointmentsService.getAppointmentsByVetId(vetId, date);
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Reprogramar una cita' })
   @ApiResponse({ status: 200, description: 'Cita reprogramada exitosamente' })
@@ -69,7 +100,7 @@ export class AppointmentsController {
   @ApiResponse({ status: 500, description: 'Error interno del servidor' })
   @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN)
+  @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN, EUserRole.VETERINARIO)
   updateAppointmentStatus(@Param('id') id: string, @Query('status') status: EAppointmentStatus): Promise<AppointmentResponse> {
     return this.appointmentsService.updateAppointmentStatus(id, status);
   }

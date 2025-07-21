@@ -178,12 +178,7 @@ export class AppointmentsService {
       duration,
     );
 
-    await this.validateNoOverlap(
-      vetId,
-      finalDate,
-      finalStartTime,
-      duration,
-    );
+    await this.validateNoOverlap(vetId, finalDate, finalStartTime, duration);
 
     const updated = await this.prisma.appointment.update({
       where: { id },
@@ -209,6 +204,62 @@ export class AppointmentsService {
     if (!updated) throw new NotFoundException('Error al reprogramar la cita');
 
     return await this.getAppointmentById(updated.id);
+  }
+
+  async getAppointmentsByVetId(
+    vetId: string,
+    dateStr: Date,
+  ): Promise<AppointmentResponse[]> {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) {
+      throw new BadRequestException('Fecha inválida');
+    }
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999);
+    const vet = await this.usersService.getUserById(vetId);
+    if (!vet) throw new NotFoundException('Veterinario no encontrado');
+    if (vet.role !== EUserRole.VETERINARIO)
+      throw new BadRequestException('El usuario no es un veterinario');
+
+    const appointments = await this.prisma.appointment.findMany({
+      where: { vetId, date: { gte: start, lte: end } },
+      include: {
+        vet: true,
+        pet: {
+          include: {
+            owner: true,
+          },
+        },
+        services: {
+          include: {
+            clinicalService: true,
+          },
+        },
+      },
+      orderBy: {
+        startTime: 'asc',
+      },
+    });
+
+    if (appointments.length === 0)
+      throw new NotFoundException(
+        'No se encontraron citas en la fecha especificada',
+      );
+
+    return appointments.map((appointment) =>
+      appointmentToAppointmentResponse(
+        appointment as Appointment & {
+          vet: User;
+          pet: Pet & { owner: Owner };
+          services: {
+            clinicalService: ClinicalService;
+          }[];
+        },
+      ),
+    );
   }
 
   async getAppointmentById(id: string): Promise<AppointmentResponse> {
@@ -257,6 +308,9 @@ export class AppointmentsService {
           lte: end,
         },
       },
+      orderBy: {
+        startTime: 'asc',
+      },
       include: {
         vet: true,
         pet: {
@@ -284,13 +338,63 @@ export class AppointmentsService {
     );
   }
 
-  async updateAppointmentStatus(id: string, status: EAppointmentStatus): Promise<AppointmentResponse> {
+  async getAppointmentsByPetId(petId: string): Promise<AppointmentResponse[]> {
+    const pet = await this.petsService.getPetById(petId);
+    if (!pet) throw new NotFoundException('Mascota no encontrada');
+
+    const appointments = await this.prisma.appointment.findMany({
+      where: { petId: pet.id },
+      include: {
+        vet: true,
+        pet: {
+          include: {
+            owner: true,
+          },
+        },
+        services: {
+          include: {
+            clinicalService: true,
+          },
+        },
+      },
+      orderBy: [
+        {
+          date: 'desc',
+        },
+        {
+          startTime: 'desc',
+        },
+      ],
+    });
+
+    if (!appointments)
+      throw new NotFoundException('No se encontraron citas para esta mascota');
+
+    return appointments.map((appointment) =>
+      appointmentToAppointmentResponse(
+        appointment as Appointment & {
+          vet: User;
+          pet: Pet & { owner: Owner };
+          services: {
+            clinicalService: ClinicalService;
+          }[];
+        },
+      ),
+    );
+  }
+
+  async updateAppointmentStatus(
+    id: string,
+    status: EAppointmentStatus,
+  ): Promise<AppointmentResponse> {
     status = status.toUpperCase() as EAppointmentStatus;
     if (!Object.values(EAppointmentStatus).includes(status))
       throw new BadRequestException('Estado inválido');
 
-    const appointment = await this.prisma.appointment.findUnique({ where: { id } });
-  
+    const appointment = await this.prisma.appointment.findUnique({
+      where: { id },
+    });
+
     if (!appointment) throw new NotFoundException('Cita no encontrada');
     const updated = await this.prisma.appointment.update({
       where: { id },
@@ -302,7 +406,8 @@ export class AppointmentsService {
       },
     });
 
-    if (!updated) throw new NotFoundException('Error al actualizar el estado de la cita');
+    if (!updated)
+      throw new NotFoundException('Error al actualizar el estado de la cita');
 
     return await this.getAppointmentById(updated.id);
   }
