@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ClinicalServicesService } from '../services/clinical-services.service';
 import { ClinicalServiceForCreationDto } from '../dto/clinicalServiceForCreationDto.dto';
 import { ClinicalServiceResponse } from '../dto/clinical-service.response';
@@ -42,5 +42,16 @@ export class ClinicalServicesController {
   @Roles(EUserRole.SUPERADMIN)
   async updateClinicalService(@Body() request: ClinicalServiceForUpdateDto): Promise<ClinicalServiceResponse> {
     return this.clinicalServicesService.updateClinicalService(request);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Eliminar un servicio clínico' })
+  @ApiResponse({ status: 200, description: 'Servicio clínico eliminado exitosamente' })
+  @ApiResponse({ status: 400, description: 'Error al eliminar el servicio clínico' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(EUserRole.SUPERADMIN)
+  async deleteClinicalService(@Param('id') id: string): Promise<void> {
+    return this.clinicalServicesService.deleteClinicalService(id);
   }
 }

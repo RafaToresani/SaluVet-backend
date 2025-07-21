@@ -6,6 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { LoggingInterceptor } from './common/interceptors/logger.interceptor';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { customSwaggerOptions } from './common/utils/swagger/swagger-custom';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,8 +29,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Gestión turnos API')
-    .setDescription('')
+    .setTitle('Saluvet API')
+    .setDescription('API para la gestión de la clínica veterinaria Saluvet')
     .setVersion(`${configService.get('app.version')}`)
     .addBearerAuth(
       {
@@ -43,7 +44,7 @@ async function bootstrap() {
     )
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, documentFactory);
+  SwaggerModule.setup('docs', app, documentFactory, customSwaggerOptions);
 
   await app.listen(port);
 }

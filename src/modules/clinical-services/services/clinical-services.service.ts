@@ -8,6 +8,7 @@ import { ClinicalServiceForUpdateDto } from '../dto/clinicalServiceForUpdateDto.
 
 @Injectable()
 export class ClinicalServicesService {
+  
   constructor(private readonly prisma: PrismaService) {}
 
   async createClinicalService(
@@ -76,6 +77,17 @@ export class ClinicalServicesService {
     });
 
     return clinicalServiceToClinicalServiceResponse(updatedClinicalService);
+  }
+
+  async deleteClinicalService(id: string): Promise<void> {
+    const clinicalService = await this.getClinicalServiceById(id);
+    if (!clinicalService) {
+      throw new BadRequestException('El servicio no existe');
+    }
+    await this.prisma.clinicalService.delete({
+      where: { id: clinicalService.id },
+    });
+    return;
   }
 
   async getClinicalServiceById(id: string): Promise<ClinicalService | null> {

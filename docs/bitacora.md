@@ -82,7 +82,7 @@
 * HU-20: Inicializar schedule.
 * HU-21: Obtener schedule con su config.
 * HU-22: Actualizar Schedule.
-* HU-23: 
+* HU-23: Gestión de servicios veterinarios.
 
 #### Historial de tareas.
 * Implementé los modelos scheduleConfig, y scheduleConfigDay en prisma.
@@ -94,12 +94,14 @@
 * Agregué la eliminación de owner.
 * Implementé Clinical Service en prisma.
 * Creé módulo de servicios clínicos.
-* Inicié 
+* Implementé createClinicalService, getClinicalService, updateClinicalService.
+* Implementé una seed de servicios veterinarios.
 ---
 
 ## 21/07/2025
 
 #### Historias de tareas.
-* Implementación
+* Implementé deleteClinicalService.
+
 
 
