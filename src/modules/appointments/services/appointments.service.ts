@@ -284,6 +284,29 @@ export class AppointmentsService {
     );
   }
 
+  async updateAppointmentStatus(id: string, status: EAppointmentStatus): Promise<AppointmentResponse> {
+    status = status.toUpperCase() as EAppointmentStatus;
+    if (!Object.values(EAppointmentStatus).includes(status))
+      throw new BadRequestException('Estado inválido');
+
+    const appointment = await this.prisma.appointment.findUnique({ where: { id } });
+  
+    if (!appointment) throw new NotFoundException('Cita no encontrada');
+    const updated = await this.prisma.appointment.update({
+      where: { id },
+      data: { status },
+      include: {
+        vet: true,
+        pet: { include: { owner: true } },
+        services: { include: { clinicalService: true } },
+      },
+    });
+
+    if (!updated) throw new NotFoundException('Error al actualizar el estado de la cita');
+
+    return await this.getAppointmentById(updated.id);
+  }
+
   private validateAvailability(
     scheduleConfig: ScheduleConfig & { days: ScheduleConfigDay[] },
     date: Date,

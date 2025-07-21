@@ -4,7 +4,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AppointmentForCreationDto } from '../dtos/appointmentForCreationDto.dto';
 import { JwtAuthGuard } from 'src/common/guards/auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
-import { EUserRole } from 'generated/prisma';
+import { EAppointmentStatus, EUserRole } from 'generated/prisma';
 import { Roles } from 'src/common/decorators/role.decorator';
 import { UseGuards } from '@nestjs/common';
 import { RescheduleAppointmentDto } from '../dtos/rescheduleAppointmentDto.dto';
@@ -57,5 +57,20 @@ export class AppointmentsController {
   @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN)
   rescheduleAppointment(@Param('id') id: string, @Body() rescheduleDto: RescheduleAppointmentDto): Promise<AppointmentResponse> {
     return this.appointmentsService.rescheduleAppointment(id, rescheduleDto);
+  }
+
+  @Patch('update-status/:id')
+  @ApiOperation({ summary: 'Actualizar el estado de una cita' })
+  @ApiResponse({ status: 200, description: 'Cita actualizada exitosamente' })
+  @ApiResponse({ status: 400, description: 'Error al actualizar el estado de la cita' })
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'No encontrado' })
+  @ApiResponse({ status: 500, description: 'Error interno del servidor' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(EUserRole.RECEPCIONISTA, EUserRole.SUPERADMIN)
+  updateAppointmentStatus(@Param('id') id: string, @Query('status') status: EAppointmentStatus): Promise<AppointmentResponse> {
+    return this.appointmentsService.updateAppointmentStatus(id, status);
   }
 }
