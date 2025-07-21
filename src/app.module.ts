@@ -12,6 +12,7 @@ import { PetsModule } from './modules/pets/pets.module';
 import { ScheduleModule } from './modules/schedule/schedule.module';
 import { ClinicalServicesModule } from './modules/clinical-services/clinical-services.module';
 import { ClinicalServicesService } from './modules/clinical-services/services/clinical-services.service';
+import { AppointmentsModule } from './modules/appointments/appointments.module';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -28,6 +29,7 @@ import * as path from 'path';
     PetsModule,
     ScheduleModule,
     ClinicalServicesModule,
+    AppointmentsModule,
   ],
   controllers: [],
   providers: [PrismaService],

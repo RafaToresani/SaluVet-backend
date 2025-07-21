@@ -167,6 +167,13 @@ export class ScheduleConfigService {
       );
     }
   }
-  
+
+  async getScheduleConfigByVetId(vetId: string): Promise<ScheduleConfig & { days: ScheduleConfigDay[] } | null> {
+    const scheduleConfig = await this.prisma.scheduleConfig.findUnique({
+      where: { vetId },
+      include: { days: true },
+    });
+    return scheduleConfig;
+  }
   
 }

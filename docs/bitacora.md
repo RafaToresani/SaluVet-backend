@@ -1,5 +1,7 @@
 # Bitácora del proyecto.
 ---
+***HU Realizadas:*** 01 - 02 - 03 - 04 - 05 - 06 - 07 - 08 - 13 - 20 - 21 - 22 - 23
+---
 ## 16/07/2025
 
 ### Objetivo: 
@@ -100,8 +102,19 @@
 
 ## 21/07/2025
 
+#### Historias de usuario:
+* HU-09: Crear turnos para mascotas con veterinarios específicos
+* HU-11: Cancelar o reprogramar turnos
+* HU-12: Ver lista de turnos del día
+
+
 #### Historias de tareas.
 * Implementé deleteClinicalService.
-
+* Modifiqué las Historias de usuario 🥴
+* Implementé model de appointment en prisma.
+* Implementé modulo de appointments
+* Implementé la creación de turnos con sus validaciones.
+* Creé appointment response y su mapper.
+* Implementé endpoint getAppointmentsByDate
 
 
