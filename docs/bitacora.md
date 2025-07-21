@@ -104,7 +104,7 @@
 
 #### Historias de usuario:
 * HU-09: Crear turnos para mascotas con veterinarios específicos
-* HU-11: Cancelar o reprogramar turnos
+* HU-11: Reprogramar turno
 * HU-12: Ver lista de turnos del día
 
 
