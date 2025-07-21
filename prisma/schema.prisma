@@ -148,6 +148,7 @@ model Appointment {
   date             DateTime
   startTime        Int
   duration         Int
+  totalPrice       Float
   status           EAppointmentStatus           @default(PENDIENTE)
   cancelReason     String?
   createdAt        DateTime                     @default(now())

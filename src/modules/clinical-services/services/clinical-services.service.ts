@@ -36,6 +36,7 @@ export class ClinicalServicesService {
     return clinicalServices.map(clinicalServiceToClinicalServiceResponse);
   }
 
+
   async getClinicalServiceByName(
     name: string,
   ): Promise<ClinicalService | null> {

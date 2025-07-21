@@ -111,5 +111,6 @@
 #### Historias de tareas.
 * Implementé deleteClinicalService.
 * Modifiqué las Historias de usuario 🥴
-* 
+* Implementé model de appointment en prisma.
+* Implementé modulo de appointments
 
