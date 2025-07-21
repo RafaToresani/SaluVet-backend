@@ -116,5 +116,5 @@
 * Implementé la creación de turnos con sus validaciones.
 * Creé appointment response y su mapper.
 * Implementé endpoint getAppointmentsByDate
-
+* Implementé endpoint de reprogramar turno.
 

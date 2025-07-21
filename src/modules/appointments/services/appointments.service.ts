@@ -163,7 +163,9 @@ export class AppointmentsService {
     const vetId = appointment.vetId;
     const duration = appointment.duration;
 
-    
+    if (finalDate < new Date())
+      throw new BadRequestException('No se puede reprogramar al pasado');
+
     const scheduleConfig =
       await this.scheduleConfigService.getScheduleConfigByVetId(vetId);
     if (!scheduleConfig)
