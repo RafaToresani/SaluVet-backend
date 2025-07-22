@@ -130,3 +130,5 @@
 * HU-17: Registrar vacunas aplicadas.
 * HU-18: Obtener historial clínico de una mascota.
 
+#### Historial de tareas:
+* Agregué models medicalRecords y vaccines a prisma.

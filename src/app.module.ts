@@ -13,6 +13,7 @@ import { ScheduleModule } from './modules/schedule/schedule.module';
 import { ClinicalServicesModule } from './modules/clinical-services/clinical-services.module';
 import { ClinicalServicesService } from './modules/clinical-services/services/clinical-services.service';
 import { AppointmentsModule } from './modules/appointments/appointments.module';
+import { MedicalRecordsModule } from './modules/medical-records/medical-records.module';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -30,6 +31,7 @@ import * as path from 'path';
     ScheduleModule,
     ClinicalServicesModule,
     AppointmentsModule,
+    MedicalRecordsModule,
   ],
   controllers: [],
   providers: [PrismaService],
