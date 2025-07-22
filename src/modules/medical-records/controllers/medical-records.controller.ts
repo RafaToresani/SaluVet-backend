@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { MedicalRecordsService } from '../services/medical-records.service';
 import { MedicalRecordForCreationDto, VaccineForCreationDto } from '../dtos/medicalRecordForCreationDto.dto';
 import { RolesGuard } from 'src/common/guards/roles.guard';
@@ -21,6 +21,15 @@ export class MedicalRecordsController {
   @Roles(EUserRole.VETERINARIO)
   async createMedicalRecord(@UserId() userId: string, @Body() medicalRecordForCreationDto: MedicalRecordForCreationDto) {
     return this.medicalRecordsService.createMedicalRecord(userId, medicalRecordForCreationDto);
+  }
+
+  @Get('by-pet')
+  @ApiOperation({ summary: 'Obtener los historiales médicos de una mascota' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(EUserRole.VETERINARIO, EUserRole.SUPERADMIN, EUserRole.RECEPCIONISTA)
+  async findMedicalRecordsByPetId(@UserId() userId: string, @Query('petId') petId: string) {
+    return this.medicalRecordsService.findMedicalRecordsByPetId(petId);
   }
 
   @Patch()

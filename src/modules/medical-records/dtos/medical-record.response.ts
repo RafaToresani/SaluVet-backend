@@ -3,7 +3,6 @@ import { VaccineResponse } from "./vaccine.response";
 export interface MedicalRecordResponse {
   id: string;
   petId: string;
-  petName: string
   vetId: string;
   vetName: string;
   appointmentId: string;
