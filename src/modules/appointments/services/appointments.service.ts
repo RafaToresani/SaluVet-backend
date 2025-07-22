@@ -132,7 +132,7 @@ export class AppointmentsService {
 
     if (!appointment) throw new NotFoundException('Error al crear la cita');
 
-    return await this.getAppointmentById(appointment.id);
+    return await this.getAppointmentByIdToResponse(appointment.id);
   }
 
   async rescheduleAppointment(
@@ -203,7 +203,7 @@ export class AppointmentsService {
 
     if (!updated) throw new NotFoundException('Error al reprogramar la cita');
 
-    return await this.getAppointmentById(updated.id);
+    return await this.getAppointmentByIdToResponse(updated.id);
   }
 
   async getAppointmentsByVetId(
@@ -262,7 +262,7 @@ export class AppointmentsService {
     );
   }
 
-  async getAppointmentById(id: string): Promise<AppointmentResponse> {
+  async getAppointmentByIdToResponse(id: string): Promise<AppointmentResponse> {
     const appointment = await this.prisma.appointment.findUnique({
       where: { id },
       include: {
@@ -409,7 +409,7 @@ export class AppointmentsService {
     if (!updated)
       throw new NotFoundException('Error al actualizar el estado de la cita');
 
-    return await this.getAppointmentById(updated.id);
+    return await this.getAppointmentByIdToResponse(updated.id);
   }
 
   private validateAvailability(
@@ -488,5 +488,13 @@ export class AppointmentsService {
 
     const eWeekDay = jsToEWeekDayMap[date.getDay()];
     return eWeekDay;
+  }
+
+  async getAppointmentById(id: string): Promise<Appointment | null> {
+    const appointment = await this.prisma.appointment.findUnique({
+      where: { id },
+    });
+    if (!appointment) throw new NotFoundException('Cita no encontrada');
+    return appointment;
   }
 }

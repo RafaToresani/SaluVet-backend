@@ -11,5 +11,6 @@ import { UsersModule } from '../users/users.module';
   imports: [ClinicalServicesModule, PetsModule, ScheduleModule, UsersModule],
   providers: [AppointmentsService, PrismaService],
   controllers: [AppointmentsController],
+  exports: [AppointmentsService],
 })
 export class AppointmentsModule {}
