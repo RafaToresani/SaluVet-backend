@@ -73,6 +73,7 @@
       "json",
       "ts"
     ],
+    "verbose": true,
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
@@ -82,6 +83,22 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coveragePathIgnorePatterns": [
+      "node_modules",
+      "dist",
+      ".module.ts",
+      "main.ts",
+      ".dto.ts",
+      ".entity.ts",
+      ".response.ts",
+      ".mapper.ts",
+      "swagger-custom.ts",
+      "./src/common/*" 
+    ],
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+    "^src/(.*)$": "<rootDir>/$1",
+    "^generated/(.*)$": "<rootDir>/../generated/$1"
+  }
   }
 }

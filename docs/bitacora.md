@@ -136,3 +136,4 @@
 * Implementé creación de medical record
 * Implementé actualización de medical records
 * Implementé ABM de vacuna a medical record existente.
+* Implementé el endpoint para conocer el historial médico de una mascota.
