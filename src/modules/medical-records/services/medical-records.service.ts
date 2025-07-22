@@ -1,15 +1,18 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma/prisma.service';
-import { MedicalRecordForCreationDto } from '../dtos/medicalRecordForCreationDto.dto';
+import { MedicalRecordForCreationDto, VaccineForCreationDto } from '../dtos/medicalRecordForCreationDto.dto';
 import { MedicalRecordResponse } from '../dtos/medical-record.response';
 import { AppointmentsService } from 'src/modules/appointments/services/appointments.service';
 import { UsersService } from 'src/modules/users/services/users.service';
 import { PetsService } from 'src/modules/pets/services/pets.service';
 import { MedicalRecordForUpdateDto } from '../dtos/medicalRecordForUpdateDto.dto';
 import { MedicalRecords } from 'generated/prisma';
+import { VaccineForUpdateDto } from '../dtos/vaccineForUpdateDto.dto';
 
 @Injectable()
 export class MedicalRecordsService {
+  
+  
   constructor(
     private readonly prisma: PrismaService,
     private readonly usersService: UsersService,
@@ -96,5 +99,63 @@ export class MedicalRecordsService {
       where: { id },
     });
     return medicalRecord;
+  }
+
+  async createVaccine(userId: string, medicalRecordId: string, vaccineForCreationDto: VaccineForCreationDto) {
+    const medicalRecord = await this.findMedicalRecordById(medicalRecordId);
+    if(!medicalRecord) throw new NotFoundException('El historial médico no existe');
+
+    if(medicalRecord.vetId !== userId) throw new UnauthorizedException('Veterinario no autorizado para crear la vacuna');
+
+    const vaccine = await this.prisma.vaccines.create({
+      data: {
+        name: vaccineForCreationDto.name,
+        description: vaccineForCreationDto.description || '',
+        date: new Date(),
+        medicalRecords: {
+          connect: { id: medicalRecordId },
+        },
+      },
+    });
+
+    return vaccine;
+  }
+
+  async updateVaccine(userId: string,vaccineForUpdateDto: VaccineForUpdateDto) {
+    const { id, name, description } = vaccineForUpdateDto;
+
+    const vaccine = await this.prisma.vaccines.findUnique({
+      where: { id },
+      include: {
+        medicalRecords: true,
+      },
+    });
+    if(!vaccine) throw new NotFoundException('La vacuna no existe');
+    if(vaccine.medicalRecords.vetId !== userId) throw new UnauthorizedException('Veterinario no autorizado para actualizar la vacuna');
+
+    const nameToUpdate = name || vaccine.name;
+    const descriptionToUpdate = description || vaccine.description;
+
+    await this.prisma.vaccines.update({
+      where: { id },
+      data: { name: nameToUpdate, description: descriptionToUpdate },
+    });
+  }
+
+  async deleteVaccine(userId: string, vaccineId: string) {
+    const vaccine = await this.prisma.vaccines.findUnique({
+      where: { id: vaccineId },
+      include: {
+        medicalRecords: true,
+      },
+    });
+    if(!vaccine) throw new NotFoundException('La vacuna no existe');
+    if(vaccine.medicalRecords.vetId !== userId) throw new UnauthorizedException('Veterinario no autorizado para eliminar la vacuna');
+
+    const deletedVaccine = await this.prisma.vaccines.delete({
+      where: { id: vaccineId },
+    });
+    if(!deletedVaccine) throw new NotFoundException('La vacuna no existe');
+
   }
 }

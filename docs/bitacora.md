@@ -133,3 +133,6 @@
 #### Historial de tareas:
 * Agregué models medicalRecords y vaccines a prisma.
 * Implementación modulo medical records.
+* Implementé creación de medical record
+* Implementé actualización de medical records
+* Implementé ABM de vacuna a medical record existente.
