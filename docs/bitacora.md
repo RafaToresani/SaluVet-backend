@@ -120,3 +120,13 @@
 * Implementé el endpoint de cambiar estado de cita.
 * Implementé el endpoint de traer el historial de citas de una mascota.
 * Implementé el endpoint para que el veterinario consulte sus citas del día.
+---
+
+## 22/07/2025
+
+#### Historias de usuario:
+* HU-15: Registrar consulta médica.
+* HU-16: Editar o actualizar consulta médica.
+* HU-17: Registrar vacunas aplicadas.
+* HU-18: Obtener historial clínico de una mascota.
+

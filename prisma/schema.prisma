@@ -57,7 +57,8 @@ model User {
 
   scheduleConfig ScheduleConfig?
 
-  appointments Appointment[]
+  appointments   Appointment[]
+  medicalRecords MedicalRecords[]
 
   @@map("users")
 }
@@ -78,17 +79,18 @@ model Owner {
 }
 
 model Pet {
-  id           String        @id @default(uuid())
-  name         String
-  species      EPetSpecies
-  breed        String
-  birthdate    DateTime
-  gender       EPetGender
-  ownerId      String
-  appointments Appointment[]
-  owner        Owner         @relation("OwnerPets", fields: [ownerId], references: [id], onDelete: Cascade)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id             String           @id @default(uuid())
+  name           String
+  species        EPetSpecies
+  breed          String
+  birthdate      DateTime
+  gender         EPetGender
+  ownerId        String
+  appointments   Appointment[]
+  owner          Owner            @relation("OwnerPets", fields: [ownerId], references: [id], onDelete: Cascade)
+  medicalRecords MedicalRecords[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 
   @@map("pets")
 }
@@ -151,6 +153,7 @@ model Appointment {
   totalPrice       Float
   status           EAppointmentStatus           @default(PENDIENTE)
   cancelReason     String?
+  medicalRecords   MedicalRecords[]
   createdAt        DateTime                     @default(now())
   updatedAt        DateTime                     @updatedAt
 
@@ -169,4 +172,40 @@ model AppointmentClinicalService {
 
   @@id([appointmentId, clinicalServiceId])
   @@map("appointments_clinical_services")
+}
+
+model MedicalRecords {
+  id    String @id @default(uuid())
+  petId String
+  pet   Pet    @relation(fields: [petId], references: [id], onDelete: Cascade)
+
+  vetId String
+  vet   User   @relation(fields: [vetId], references: [id], onDelete: Cascade)
+
+  appointmentId String?
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  date      DateTime @default(now())
+  diagnosis String?
+  treatment String?
+  notes     String?
+  vaccines  Vaccines[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("medical_records")
+}
+
+model Vaccines {
+  id String @id @default(uuid())
+  medicalRecordsId String
+  medicalRecords MedicalRecords @relation(fields: [medicalRecordsId], references: [id], onDelete: Cascade)
+  name String
+  description String?
+  date DateTime @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("vaccines")
 }
