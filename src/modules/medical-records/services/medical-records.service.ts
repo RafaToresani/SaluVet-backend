@@ -6,8 +6,9 @@ import { AppointmentsService } from 'src/modules/appointments/services/appointme
 import { UsersService } from 'src/modules/users/services/users.service';
 import { PetsService } from 'src/modules/pets/services/pets.service';
 import { MedicalRecordForUpdateDto } from '../dtos/medicalRecordForUpdateDto.dto';
-import { MedicalRecords } from 'generated/prisma';
+import { Appointment, MedicalRecords, User } from 'generated/prisma';
 import { VaccineForUpdateDto } from '../dtos/vaccineForUpdateDto.dto';
+import { medicalRecordsToResponse } from 'src/common/mappers/medical-records.mappers';
 
 @Injectable()
 export class MedicalRecordsService {
@@ -99,6 +100,24 @@ export class MedicalRecordsService {
       where: { id },
     });
     return medicalRecord;
+  }
+
+  async findMedicalRecordsByPetId(petId: string): Promise<MedicalRecordResponse[]> {
+    const pet = await this.petsService.getPetById(petId);
+    if(!pet) throw new NotFoundException('La mascota no existe');
+
+    const medicalRecords = await this.prisma.medicalRecords.findMany({
+      where: { petId },
+      include: {
+        vaccines: true,
+        appointment: {
+          include: {
+            vet: true,
+          },
+        },
+      },
+    });
+    return medicalRecords.map(medicalRecord => medicalRecordsToResponse(medicalRecord, medicalRecord.vaccines, medicalRecord.appointment as Appointment & { vet: User }));
   }
 
   async createVaccine(userId: string, medicalRecordId: string, vaccineForCreationDto: VaccineForCreationDto) {
