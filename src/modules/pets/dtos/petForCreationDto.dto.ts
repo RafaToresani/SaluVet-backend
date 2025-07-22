@@ -21,7 +21,7 @@ export class PetForCreationDto {
 
   @ApiProperty({
     description: 'La especie de la mascota',
-    example: EPetSpecies.CANINO,
+    example: EPetSpecies.PERRO,
   })
   @IsNotEmpty()
   @IsEnum(EPetSpecies)

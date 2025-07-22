@@ -21,6 +21,7 @@ import { buildPaginatedResponse } from 'src/common/utils/pagination/buildPaginat
 
 @Injectable()
 export class OwnersService {
+  
   constructor(
     private readonly prisma: PrismaService,
     private readonly petsService: PetsService,
@@ -120,6 +121,14 @@ export class OwnersService {
     });
 
     return ownerToResponse(updatedOwner);
+  }
+
+  async deleteOwner(id: string): Promise<void> {
+    const ownerToDelete = await this.findOwnerById(id);
+    if (!ownerToDelete) throw new BadRequestException('El dueño no existe.');
+    await this.prisma.owner.delete({
+      where: { id },
+    });
   }
 
   async findOwnerById(id: string): Promise<Owner | null> {
