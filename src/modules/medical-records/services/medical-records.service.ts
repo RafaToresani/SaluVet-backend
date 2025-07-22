@@ -5,6 +5,8 @@ import { MedicalRecordResponse } from '../dtos/medical-record.response';
 import { AppointmentsService } from 'src/modules/appointments/services/appointments.service';
 import { UsersService } from 'src/modules/users/services/users.service';
 import { PetsService } from 'src/modules/pets/services/pets.service';
+import { MedicalRecordForUpdateDto } from '../dtos/medicalRecordForUpdateDto.dto';
+import { MedicalRecords } from 'generated/prisma';
 
 @Injectable()
 export class MedicalRecordsService {
@@ -68,4 +70,31 @@ export class MedicalRecordsService {
   
   }
   
+  async updateMedicalRecord(
+    vetId: string,
+    medicalRecordForUpdateDto: MedicalRecordForUpdateDto,
+  ): Promise<void> {
+    const { id, diagnosis, treatment, notes } = medicalRecordForUpdateDto;
+
+    const medicalRecord = await this.findMedicalRecordById(id);
+    if(!medicalRecord) throw new NotFoundException('El historial médico no existe');
+
+    if(medicalRecord.vetId !== vetId) throw new UnauthorizedException('Veterinario no autorizado para actualizar el historial médico');
+
+    const diagnosisToUpdate = diagnosis || medicalRecord.diagnosis;
+    const treatmentToUpdate = treatment || medicalRecord.treatment;
+    const notesToUpdate = notes || medicalRecord.notes;
+
+    await this.prisma.medicalRecords.update({
+      where: { id },
+      data: { diagnosis: diagnosisToUpdate, treatment: treatmentToUpdate, notes: notesToUpdate },
+    });
+  }
+
+  async findMedicalRecordById(id: string): Promise<MedicalRecords| null> {
+    const medicalRecord = await this.prisma.medicalRecords.findUnique({
+      where: { id },
+    });
+    return medicalRecord;
+  }
 }
