@@ -142,4 +142,5 @@
 
 ## 23/07/2025
 * Testeé todo owners service, pet controller, owner controller.
+* Cambios en el mvp. Ahora hay una relación entre el servicio ofrecido y el profesional que lo ofrece.
 

@@ -135,6 +135,8 @@ model ClinicalService {
   @@map("clinical_services")
 }
 
+
+
 model Appointment {
   id               String                       @id @default(uuid())
   petId            String
