@@ -12,7 +12,6 @@ import {
   User,
 } from 'generated/prisma';
 import { PrismaService } from 'src/config/prisma/prisma.service';
-import { ScheduleConfigDayService } from './schedule-config-day.service';
 import { ConfigService } from '@nestjs/config';
 import { ScheduleConfigResponse } from '../dtos/schedule-config.response';
 import { scheduleConfigToScheduleConfigResponse } from 'src/common/mappers/schedule.mappers';
@@ -25,7 +24,6 @@ import {
 export class ScheduleConfigService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly scheduleConfigDayService: ScheduleConfigDayService,
     private readonly configService: ConfigService,
   ) {}
 
