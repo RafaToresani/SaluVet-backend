@@ -388,7 +388,7 @@ export class AppointmentsService {
     id: string,
     status: EAppointmentStatus,
   ): Promise<AppointmentResponse> {
-    status = status.toUpperCase() as EAppointmentStatus;
+    status = status as EAppointmentStatus;
     if (!Object.values(EAppointmentStatus).includes(status))
       throw new BadRequestException('Estado inválido');
 
