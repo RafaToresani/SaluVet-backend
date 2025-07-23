@@ -100,6 +100,34 @@ export class ClinicalServicesService {
     });
   }
 
+  async toggleUserClinicalService(userId: string, clinicalServiceId: string) {
+    const userClinicalService = await this.prisma.userClinicalService.findUnique({
+      where: {
+        userId_clinicalServiceId: {
+          userId,
+          clinicalServiceId,
+        },
+      },
+    });
+    console.log('userClinicalService:', userClinicalService);
+    if (!userClinicalService) throw new BadRequestException('El veterinario no tiene habilitado este servicio');
+    const newIsActive = !userClinicalService.isActive;
+    const updated = await this.prisma.userClinicalService.update({
+      where: {
+        userId_clinicalServiceId: {
+          userId,
+          clinicalServiceId,
+        },
+      },
+      data: {
+        isActive: newIsActive,
+      },
+    });
+  
+    return updated;
+  }
+  
+
   async count(): Promise<number> {
     return this.prisma.clinicalService.count();
   }
