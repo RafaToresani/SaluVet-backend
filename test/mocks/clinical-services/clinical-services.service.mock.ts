@@ -1,6 +1,6 @@
 export const clinicalServicesServiceMock = {
   getClinicalServiceById: jest.fn(),
-  getClinicalServices: jest.fn(),
+  getAllClinicalServices: jest.fn(),
   createClinicalService: jest.fn(),
   updateClinicalService: jest.fn(),
   deleteClinicalService: jest.fn(),
