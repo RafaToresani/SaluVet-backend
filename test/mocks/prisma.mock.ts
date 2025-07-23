@@ -9,7 +9,13 @@ export const prismaMock = {
     count: jest.fn(),
   },
   owner: {
+    create: jest.fn(),
+    findFirst: jest.fn(),
+    findMany: jest.fn(),
     findUnique: jest.fn(),
+    update: jest.fn(),
+    delete: jest.fn(),
+    count: jest.fn(),
   },
 };
 

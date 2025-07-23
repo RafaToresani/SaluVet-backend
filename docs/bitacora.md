@@ -137,3 +137,8 @@
 * Implementé actualización de medical records
 * Implementé ABM de vacuna a medical record existente.
 * Implementé el endpoint para conocer el historial médico de una mascota.
+* Arranqué a implementar tests.
+* Testeé todo pets service
+
+## 23/07/2025
+* Testeé todo owners service
