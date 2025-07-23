@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PetsService } from './pets.service';
 import { PrismaService } from 'src/config/prisma/prisma.service';
-import { PetForCreationDto } from '../dtos/petForCreationDto.dto';
 import { EPetGender, EPetSpecies, Pet } from 'generated/prisma';
 import { BadRequestException } from '@nestjs/common';
 import {
@@ -9,40 +8,14 @@ import {
   SortOrder,
 } from 'src/common/utils/pagination/metaQueryDto.dto';
 import { PetForUpdateDto } from '../dtos/petForUpdateDto.dto';
+import { petMock, petCreateDto, petUpdateDto} from 'test/mocks/pets.mock';
+import { prismaMock } from 'test/mocks/prisma.mock';
+import { ownerMock } from 'test/mocks/owners.mock';
 
 describe('PetsService', () => {
   let service: PetsService;
-  let prismaMock: {
-    pet: {
-      create: jest.Mock;
-      findFirst: jest.Mock;
-      findMany: jest.Mock;
-      findUnique: jest.Mock;
-      update: jest.Mock;
-      delete: jest.Mock;
-      count: jest.Mock;
-    };
-    owner: {
-      findUnique: jest.Mock;
-    };
-  };
-
+  
   beforeEach(async () => {
-    prismaMock = {
-      pet: {
-        create: jest.fn(),
-        findFirst: jest.fn(),
-        findMany: jest.fn(),
-        findUnique: jest.fn(),
-        update: jest.fn(),
-        delete: jest.fn(),
-        count: jest.fn(),
-      },
-      owner: {
-        findUnique: jest.fn(),
-      },
-    };
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         PetsService,
@@ -58,15 +31,7 @@ describe('PetsService', () => {
   });
 
   describe('createPet', () => {
-    let createPetDto: PetForCreationDto = {
-      ownerId: '1',
-      name: 'Buddy',
-      birthdate: new Date('2020-01-01'),
-      species: EPetSpecies.PERRO,
-      breed: 'Labrador',
-      gender: EPetGender.MACHO,
-    };
-
+    const createPetDto = petCreateDto;
     const ownerDoesNotExistMessage = 'El dueño no existe';
     const petWithNameAlreadyExistsMessage =
       'El dueño ya tiene un mascota con ese nombre';
@@ -74,10 +39,7 @@ describe('PetsService', () => {
       'La fecha de nacimiento no puede ser en el futuro';
 
     function mockOwnerExists() {
-      prismaMock.owner.findUnique.mockResolvedValue({
-        id: '1',
-        name: 'Rafa',
-      });
+      prismaMock.owner.findUnique.mockResolvedValue(ownerMock);
     }
 
     function mockOwnerDoesNotExist() {
@@ -92,7 +54,7 @@ describe('PetsService', () => {
       prismaMock.pet.findFirst.mockResolvedValue({
         id: '123',
         ...createPetDto,
-        owner: { id: '1', name: 'Rafa' },
+        owner: ownerMock,
       });
     }
 
@@ -154,14 +116,6 @@ describe('PetsService', () => {
   });
 
   describe('getPetById', () => {
-    const petMock = {
-      id: '123',
-      name: 'Buddy',
-      birthdate: new Date('2020-01-01'),
-      species: EPetSpecies.PERRO,
-      breed: 'Labrador',
-      gender: EPetGender.MACHO,
-    };
     it('should get a pet by id', async () => {
       const petid = petMock.id;
       prismaMock.pet.findUnique.mockResolvedValue(petMock);
@@ -188,21 +142,7 @@ describe('PetsService', () => {
 
   describe('searchPets', () => {
     const petsMock = [
-      {
-        id: '1',
-        name: 'Firulais',
-        birthdate: new Date('2020-01-01'),
-        species: EPetSpecies.PERRO,
-        breed: 'Labrador',
-        gender: EPetGender.MACHO,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        ownerId: 'owner-1',
-        owner: {
-          id: 'owner-1',
-          name: 'Rafa',
-        },
-      },
+      petMock,
     ];
 
     beforeEach(() => {
@@ -232,12 +172,12 @@ describe('PetsService', () => {
       });
 
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].name).toBe('Firulais');
+      expect(result.data[0].name).toBe('Buddy');
     });
 
     it('should return paginated pets with filters', async () => {
       const metaQuery: MetaQueryDto = {
-        searchTerm: 'Firulais',
+        searchTerm: 'Buddy',
         page: 1,
         size: 10,
       };
@@ -247,22 +187,22 @@ describe('PetsService', () => {
       prismaMock.pet.findMany.mockResolvedValue(petsMock);
       prismaMock.pet.count.mockResolvedValue(1);
 
-      const result = await service.searchPets({ searchTerm: 'firu' });
+      const result = await service.searchPets({ searchTerm: 'buddy' });
 
       expect(prismaMock.pet.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: {
             OR: expect.arrayContaining([
-              { name: { contains: 'firu' } },
-              { breed: { contains: 'firu' } },
-              { gender: { equals: 'FIRU' } },
-              { species: { equals: 'FIRU' } },
+              { name: { contains: 'buddy' } },
+              { breed: { contains: 'buddy' } },
+              { gender: { equals: 'BUDDY' } },
+              { species: { equals: 'BUDDY' } },
             ]),
           },
         }),
       );
 
-      expect(result.data[0].name).toBe('Firulais');
+      expect(result.data[0].name).toBe('Buddy');
     });
 
     it('should apply pagination and sorting correctly', async () => {
@@ -303,23 +243,9 @@ describe('PetsService', () => {
   });
 
   describe('updatePet', () => {
-    const petForUpdateDto: PetForUpdateDto = {
-      id: '123',
-      name: 'LOLA',
-      birthdate: new Date('2020-01-02'),
-      species: EPetSpecies.GATO,
-      breed: 'MESTIZA',
-      gender: EPetGender.HEMBRA,
-    };
+    const petForUpdateDto= petUpdateDto;
   
-    const originalPet = {
-      id: '123',
-      name: 'Buddy',
-      birthdate: new Date('2020-01-01'),
-      species: EPetSpecies.PERRO,
-      breed: 'Labrador',
-      gender: EPetGender.MACHO,
-    };
+    const originalPet = petMock;
   
     beforeEach(() => {
       jest.clearAllMocks();
@@ -380,15 +306,6 @@ describe('PetsService', () => {
   });
 
   describe('deletePet', () => {
-    const petMock = {
-      id: '123',
-      name: 'Buddy',
-      birthdate: new Date('2020-01-01'),
-      species: EPetSpecies.PERRO,
-      breed: 'Labrador',
-      gender: EPetGender.MACHO,
-    };
-  
     it('should delete a pet', async () => {
       const petId = '123';
       prismaMock.pet.findUnique.mockResolvedValue(petMock);
@@ -411,18 +328,6 @@ describe('PetsService', () => {
   });
   
   describe('getPetOwnerByName', () => {
-    const petMock = {
-      id: '123',
-      name: 'Buddy',
-      birthdate: new Date('2020-01-01'),
-      species: EPetSpecies.PERRO,
-      breed: 'Labrador',
-      gender: EPetGender.MACHO,
-      ownerId: '1',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-  
     it('should get a pet owner by name', async () => {
       const petOwnerId = '1';
       prismaMock.pet.findFirst.mockResolvedValue(petMock);
