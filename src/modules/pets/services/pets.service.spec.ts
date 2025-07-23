@@ -8,9 +8,9 @@ import {
   SortOrder,
 } from 'src/common/utils/pagination/metaQueryDto.dto';
 import { PetForUpdateDto } from '../dtos/petForUpdateDto.dto';
-import { petMock, petCreateDto, petUpdateDto} from 'test/mocks/pets.mock';
+import { petMock, petCreateDto, petUpdateDto} from 'test/mocks/pets/pets.mock';
 import { prismaMock } from 'test/mocks/prisma.mock';
-import { ownerMock } from 'test/mocks/owners.mock';
+import { ownerMock } from 'test/mocks/owner/owners.mock';
 
 describe('PetsService', () => {
   let service: PetsService;

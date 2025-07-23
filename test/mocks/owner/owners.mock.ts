@@ -1,5 +1,5 @@
 import { MetaQueryDto, SortOrder } from "src/common/utils/pagination/metaQueryDto.dto";
-import { petMock } from "./pets.mock";
+import { petMock } from "../pets/pets.mock";
 
 export const ownerMock = {
   id: '1',

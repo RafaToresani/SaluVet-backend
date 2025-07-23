@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { OwnersService } from './owners.service';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { prismaMock } from 'test/mocks/prisma.mock';
-import { ownerMock, ownerCreateDto, metaQueryDtoMock, ownerUpdateDto } from 'test/mocks/owners.mock';
+import { ownerMock, ownerCreateDto, metaQueryDtoMock, ownerUpdateDto } from 'test/mocks/owner/owners.mock';
 import { ownerToResponseWithPets } from 'src/common/mappers/owner.mappers';
 
 describe('OwnersService', () => {
