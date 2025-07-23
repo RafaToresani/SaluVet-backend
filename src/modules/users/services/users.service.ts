@@ -10,13 +10,15 @@ import { UpdatePasswordDto } from '../dto/updatePasswordDto.dto';
 import { UserForUpdateDtoBySuperAdminDto } from '../dto/userForUpdateDtoBySuperAdminDto.dto';
 import { ConfigService } from '@nestjs/config';
 import { ScheduleConfigService } from 'src/modules/schedule/services/schedule-config.service';
+import { ClinicalServicesService } from 'src/modules/clinical-services/services/clinical-services.service';
 @Injectable()
 export class UsersService {
   
   constructor(
     private readonly prisma: PrismaService, 
     private readonly configService: ConfigService,
-    private readonly scheduleConfigService: ScheduleConfigService
+    private readonly scheduleConfigService: ScheduleConfigService,
+    private readonly clinicalServicesService: ClinicalServicesService
   ) {}
 
   async getUser(id: string): Promise<UserResponse> {
@@ -74,6 +76,7 @@ export class UsersService {
 
     if(user.role === EUserRole.VETERINARIO) {
       await this.scheduleConfigService.initializeScheduleConfig(user.id);
+      await this.clinicalServicesService.initializeUserClinicalServices(user.id);
     }
 
     return userToUserResponse(user);
