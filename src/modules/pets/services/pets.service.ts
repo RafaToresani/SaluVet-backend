@@ -23,7 +23,7 @@ export class PetsService {
     await this.validateOwnerExists(createPetDto.ownerId);
     if (await this.getPetOwnerByName(createPetDto.name, createPetDto.ownerId)) {
       throw new BadRequestException(
-        'El dueño ya tiene un mascota con ese nombre',
+        'El dueño ya tiene una mascota con ese nombre',
       );
     }
     if (createPetDto.birthdate && createPetDto.birthdate > new Date()) {
