@@ -24,7 +24,7 @@ export class OwnersService {
   
   constructor(
     private readonly prisma: PrismaService,
-    private readonly petsService: PetsService,
+
   ) {}
 
   async createOwner(owner: OwnerForCreationDto): Promise<OwnerResponse> {
