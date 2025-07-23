@@ -40,3 +40,19 @@ export const createUserDtoMock = {
   role: EUserRole.VETERINARIO,
 }
 
+export const updateUserDtoMock = {
+  name: 'Juan',
+  email: 'juan@example.com',
+  role: EUserRole.RECEPCIONISTA,
+}
+
+export const updatePasswordDtoMock = {
+  oldPassword: '123456',
+  newPassword: '123456',
+}
+
+export const getUsersQueryDtoMock = {
+  role: EUserRole.VETERINARIO,
+  email: 'juan@example.com',
+  name: 'Juan',
+}
