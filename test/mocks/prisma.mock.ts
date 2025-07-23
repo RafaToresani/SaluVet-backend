@@ -17,6 +17,24 @@ export const prismaMock = {
     delete: jest.fn(),
     count: jest.fn(),
   },
+  user: {
+    findUnique: jest.fn(),
+    findMany: jest.fn(),
+    findFirst: jest.fn(),
+    create: jest.fn(),
+    update: jest.fn(),
+    delete: jest.fn(),
+  },
+  userClinicalService: {
+    findUnique: jest.fn(),
+  },
+  scheduleConfig: {
+    findUnique: jest.fn(),
+    findMany: jest.fn(),
+    create: jest.fn(),
+    update: jest.fn(),
+    delete: jest.fn(),
+  },
 };
 
 export type PrismaMockType = typeof prismaMock;
