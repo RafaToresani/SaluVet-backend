@@ -71,6 +71,7 @@ export class AppointmentsService {
       throw new BadRequestException('No se permiten servicios duplicados');
     }
 
+    await this.clinicalServicesService.validateUserCanPerformServices(vetId, serviceIds);
     const clinicalServices: ClinicalService[] = [];
     for (const service of services) {
       const clinicalService =

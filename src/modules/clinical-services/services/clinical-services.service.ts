@@ -126,7 +126,25 @@ export class ClinicalServicesService {
   
     return updated;
   }
+
+  async validateUserCanPerformServices(userId: string, serviceIds: string[]) {
+    for (const serviceId of serviceIds) {
+      const userService = await this.prisma.userClinicalService.findUnique({
+        where: {
+          userId_clinicalServiceId: {
+            userId,
+            clinicalServiceId: serviceId,
+          },
+        },
+      });
   
+      if (!userService || !userService.isActive) {
+        throw new BadRequestException(
+          `El veterinario no tiene habilitado el servicio con id ${serviceId}`,
+        );
+      }
+    }
+  }
 
   async count(): Promise<number> {
     return this.prisma.clinicalService.count();
