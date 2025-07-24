@@ -66,6 +66,23 @@ export const prismaMock = {
     delete: jest.fn(),
     count: jest.fn(),
   },
+  medicalRecords: {
+    create: jest.fn(),
+    findUnique: jest.fn(),
+    findMany: jest.fn(),
+    update: jest.fn(),
+    delete: jest.fn(),
+    count: jest.fn(),
+    findFirst: jest.fn(),
+  },
+  vaccines: {
+    create: jest.fn(),
+    findUnique: jest.fn(),
+    findMany: jest.fn(),
+    update: jest.fn(),
+    delete: jest.fn(),
+    count: jest.fn(),
+  },
   $transaction: jest.fn(),
 };
 

@@ -5,4 +5,5 @@ export const appointmentServiceMock = {
     getAppointmentsByVetId: jest.fn(),
     rescheduleAppointment: jest.fn(),
     updateAppointmentStatus: jest.fn(),
+    getAppointmentById: jest.fn(),
 }
