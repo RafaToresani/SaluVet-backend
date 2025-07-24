@@ -59,6 +59,7 @@ model User {
 
   appointments   Appointment[]
   medicalRecords MedicalRecords[]
+  UserClinicalService UserClinicalService[]
 
   @@map("users")
 }
@@ -131,8 +132,25 @@ model ClinicalService {
   createdAt    DateTime                     @default(now())
   updatedAt    DateTime                     @updatedAt
   appointments AppointmentClinicalService[]
+  UserClinicalService UserClinicalService[]
 
   @@map("clinical_services")
+}
+
+model UserClinicalService {
+  id                String           @id @default(uuid())
+  userId            String
+  clinicalServiceId String
+  isActive          Boolean          @default(false)
+
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clinicalService   ClinicalService @relation(fields: [clinicalServiceId], references: [id], onDelete: Cascade)
+
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  @@unique([userId, clinicalServiceId])
+  @@map("users_clinical_services")
 }
 
 model Appointment {

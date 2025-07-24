@@ -136,3 +136,11 @@
 * Implementé creación de medical record
 * Implementé actualización de medical records
 * Implementé ABM de vacuna a medical record existente.
+* Implementé el endpoint para conocer el historial médico de una mascota.
+* Arranqué a implementar tests.
+* Testeé todo pets service
+
+## 23/07/2025
+* Testeé todo owners service, pet controller, owner controller.
+* Cambios en el mvp. Ahora hay una relación entre el servicio ofrecido y el profesional que lo ofrece.
+

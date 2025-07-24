@@ -71,6 +71,7 @@ export class AppointmentsService {
       throw new BadRequestException('No se permiten servicios duplicados');
     }
 
+    await this.clinicalServicesService.validateUserCanPerformServices(vetId, serviceIds);
     const clinicalServices: ClinicalService[] = [];
     for (const service of services) {
       const clinicalService =
@@ -387,7 +388,7 @@ export class AppointmentsService {
     id: string,
     status: EAppointmentStatus,
   ): Promise<AppointmentResponse> {
-    status = status.toUpperCase() as EAppointmentStatus;
+    status = status as EAppointmentStatus;
     if (!Object.values(EAppointmentStatus).includes(status))
       throw new BadRequestException('Estado inválido');
 

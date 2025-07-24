@@ -2,12 +2,13 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { ClinicalServiceForCreationDto } from '../dto/clinicalServiceForCreationDto.dto';
 import { ClinicalServiceResponse } from '../dto/clinical-service.response';
-import { ClinicalService } from 'generated/prisma';
+import { ClinicalService, EUserRole } from 'generated/prisma';
 import { clinicalServiceToClinicalServiceResponse } from 'src/common/mappers/clinical-service.mappers';
 import { ClinicalServiceForUpdateDto } from '../dto/clinicalServiceForUpdateDto.dto';
 
 @Injectable()
 export class ClinicalServicesService {
+
   
   constructor(private readonly prisma: PrismaService) {}
 
@@ -27,6 +28,8 @@ export class ClinicalServicesService {
         isActive: request.isActive,
       },
     });
+
+    await this.initializeClinicalServiceUser(newClinicalService.id);
 
     return clinicalServiceToClinicalServiceResponse(newClinicalService);
   }
@@ -97,6 +100,51 @@ export class ClinicalServicesService {
     });
   }
 
+  async toggleUserClinicalService(userId: string, clinicalServiceId: string) {
+    const userClinicalService = await this.prisma.userClinicalService.findUnique({
+      where: {
+        userId_clinicalServiceId: {
+          userId,
+          clinicalServiceId,
+        },
+      },
+    });
+    if (!userClinicalService) throw new BadRequestException('El veterinario no tiene habilitado este servicio');
+    const newIsActive = !userClinicalService.isActive;
+    const updated = await this.prisma.userClinicalService.update({
+      where: {
+        userId_clinicalServiceId: {
+          userId,
+          clinicalServiceId,
+        },
+      },
+      data: {
+        isActive: newIsActive,
+      },
+    });
+  
+    return updated;
+  }
+
+  async validateUserCanPerformServices(userId: string, serviceIds: string[]) {
+    for (const serviceId of serviceIds) {
+      const userService = await this.prisma.userClinicalService.findUnique({
+        where: {
+          userId_clinicalServiceId: {
+            userId,
+            clinicalServiceId: serviceId,
+          },
+        },
+      });
+  
+      if (!userService || !userService.isActive) {
+        throw new BadRequestException(
+          `El veterinario no tiene habilitado el servicio con id ${serviceId}`,
+        );
+      }
+    }
+  }
+
   async count(): Promise<number> {
     return this.prisma.clinicalService.count();
   }
@@ -107,5 +155,45 @@ export class ClinicalServicesService {
     });
 
     console.log('Servicios creados exitosamente');
+  }
+
+  async initializeUserClinicalServices(userId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new BadRequestException('El usuario no existe');
+  
+    const clinicalServices = await this.prisma.clinicalService.findMany({
+      where: { isActive: true },
+    });
+  
+    const relations = clinicalServices.map(service => ({
+      userId,
+      clinicalServiceId: service.id,
+      isActive: false, 
+    }));
+  
+    await this.prisma.userClinicalService.createMany({
+      data: relations,
+      skipDuplicates: true,
+    });
+  }
+  
+  async initializeClinicalServiceUser(clinicalServiceId: string) {
+    const clinicalService = await this.getClinicalServiceById(clinicalServiceId);
+    if (!clinicalService) throw new BadRequestException('El servicio no existe');
+
+    const users = await this.prisma.user.findMany({
+      where: { role: EUserRole.VETERINARIO },
+    });
+
+    const relations = users.map(user => ({
+      userId: user.id,
+      clinicalServiceId: clinicalServiceId,
+      isActive: false,
+    }));
+
+    await this.prisma.userClinicalService.createMany({
+      data: relations,
+      skipDuplicates: true,
+    });
   }
 }

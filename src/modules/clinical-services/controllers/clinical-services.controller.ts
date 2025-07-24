@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ClinicalServicesService } from '../services/clinical-services.service';
 import { ClinicalServiceForCreationDto } from '../dto/clinicalServiceForCreationDto.dto';
 import { ClinicalServiceResponse } from '../dto/clinical-service.response';
@@ -42,6 +42,17 @@ export class ClinicalServicesController {
   @Roles(EUserRole.SUPERADMIN)
   async updateClinicalService(@Body() request: ClinicalServiceForUpdateDto): Promise<ClinicalServiceResponse> {
     return this.clinicalServicesService.updateClinicalService(request);
+  }
+
+  @Patch('toggle-user-clinical-service')
+  @ApiOperation({ summary: 'Activar o desactivar un servicio clínico para un veterinario' })
+  @ApiResponse({ status: 200, description: 'Servicio clínico activado o desactivado exitosamente' })
+  @ApiResponse({ status: 400, description: 'Error al activar o desactivar el servicio clínico' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(EUserRole.SUPERADMIN)
+  async toggleUserClinicalService(@Query('userId') userId: string, @Query('clinicalServiceId') clinicalServiceId: string){
+    return this.clinicalServicesService.toggleUserClinicalService(userId, clinicalServiceId);
   }
 
   @Delete(':id')
