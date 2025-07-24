@@ -109,7 +109,6 @@ export class ClinicalServicesService {
         },
       },
     });
-    console.log('userClinicalService:', userClinicalService);
     if (!userClinicalService) throw new BadRequestException('El veterinario no tiene habilitado este servicio');
     const newIsActive = !userClinicalService.isActive;
     const updated = await this.prisma.userClinicalService.update({

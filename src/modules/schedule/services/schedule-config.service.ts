@@ -12,7 +12,6 @@ import {
   User,
 } from 'generated/prisma';
 import { PrismaService } from 'src/config/prisma/prisma.service';
-import { ScheduleConfigDayService } from './schedule-config-day.service';
 import { ConfigService } from '@nestjs/config';
 import { ScheduleConfigResponse } from '../dtos/schedule-config.response';
 import { scheduleConfigToScheduleConfigResponse } from 'src/common/mappers/schedule.mappers';
@@ -25,35 +24,45 @@ import {
 export class ScheduleConfigService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly scheduleConfigDayService: ScheduleConfigDayService,
     private readonly configService: ConfigService,
   ) {}
 
   async initializeScheduleConfig(vetId: string): Promise<ScheduleConfig> {
+    // Primero chequeamos si existe
+    const existingConfig = await this.prisma.scheduleConfig.findUnique({
+      where: { vetId },
+    });
+  
+    if (existingConfig) {
+      throw new BadRequestException('El horario ya existe');
+    }
+  
+    // Si no existe, hacemos la transacción para crear
     return this.prisma.$transaction(async (tx) => {
       const scheduleConfig = await tx.scheduleConfig.create({
         data: { vetId },
       });
-
+  
       const daysData = Object.values(EWeekDay).map((weekday) => ({
         scheduleId: scheduleConfig.id,
         weekday,
         startTime: this.configService.get('scheduleConfig.startTime') * 60,
         endTime: this.configService.get('scheduleConfig.endTime') * 60,
       }));
-
+  
       await Promise.all(
         daysData.map((day) => tx.scheduleConfigDay.create({ data: day })),
       );
-
+  
       const fullScheduleConfig = await tx.scheduleConfig.findUnique({
         where: { id: scheduleConfig.id },
         include: { days: true },
       });
-
+  
       return fullScheduleConfig!;
     });
   }
+  
 
   async updateScheduleConfig(
     vetId: string,
