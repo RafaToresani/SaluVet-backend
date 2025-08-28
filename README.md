@@ -74,6 +74,10 @@ SUPERADMIN_NAME=superadmin
 #ResetPassword
 RESET_PASSWORD_DEFAULT=saluvet123
 
+#ScheduleConfigDayVariables
+DEFAULT_STARTIME=8
+DEFAULT_ENDTIME=16
+
 ```
 
 ---
@@ -114,10 +118,9 @@ http://localhost:7500/docs
 ```
 
 ### 6. Ingresar con el superadmin creado automáticamente (según tu .env) y empezar a probar el sistema.
-```bash
-# Credenciales por defecto
+```json
 {
-  
+  "email": "superadmin@saluvet.com",
+  "password": "password123"
 }
-
 ```
