@@ -1,13 +1,7 @@
 # 🐾 SaluVet MVP
----
-
-### ***Version:*** **1.0**
-
----
 
 ## Historias de usuario
 
----
 ### 👑 Superadmin
 
 * **HU-01:** Como Superadmin, quiero que se cree automáticamente mi usuario con las credenciales del `.env` al iniciar la app, para tener acceso inicial sin intervención manual.
@@ -46,3 +40,4 @@
 * **HU-21**: Como Veterinario, quiero poder ver mi agenda semanal (días y horarios), para conocer mi disponibilidad.
 * **HU-22**: Como Veterinario, quiero modificar los horarios disponibles por día de la semana, para adaptar la agenda a mis horarios reales.
 * **HU-25**: Como Veterinario, quiero ver el servicio asociado a cada turno, para saber con qué prepararme antes de atender al paciente.
+

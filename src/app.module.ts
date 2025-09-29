@@ -65,8 +65,7 @@ export class AppModule {
 
 
   private async seedClinicalServices() {
-    const existing = await this.clinicalService.count(); // método que te diga si hay servicios
-
+    const existing = await this.clinicalService.count(); 
     if (existing > 0) return;
 
     const filePath = path.join(__dirname, 'common', 'seeds', 'clinical-services.json');

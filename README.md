@@ -1,9 +1,11 @@
 ![SaluVet](./assets/pic.jpg)
 
-# 🐾 SaluVet - Narrativa del proyecto
+# 🐾 SaluVet MVP
 
-## [Bitácora](/docs/bitacora.md)
-## [Historias de Usuario](/docs/user-stories.md)
+#### Versión: 1.0
+
+### [Bitácora](/docs/bitacora.md)
+### [Historias de Usuario](/docs/user-stories.md)
 
 ---
 
@@ -27,13 +29,13 @@ SaluVet busca resolver estos problemas con una API centralizada, accesible por m
 ---
 
 ## 👥 Roles del sistema
-* Superadmin: Responsable de configurar la clínica. Puede crear usuarios (recepcionistas y veterinarios), ver reportes generales y administrar la base completa.
+* ***Superadmin***: Responsable de configurar la clínica. Puede crear usuarios (recepcionistas y veterinarios), ver reportes generales y administrar la base completa.
 
-* Recepcionista: Administra los turnos, registra nuevos dueños y mascotas, y gestiona la atención inicial.
+* ***Recepcionista***: Administra los turnos, registra nuevos dueños y mascotas, y gestiona la atención inicial.
 
-* Veterinario: Registra consultas médicas, aplica vacunas y accede al historial clínico de sus pacientes.
+* ***Veterinario***: Registra consultas médicas, aplica vacunas y accede al historial clínico de sus pacientes.
 
-* Dueño de mascota (futuro módulo): Podrá visualizar turnos, historial y vacunas de su mascota.
+* ***Dueño de mascota (futuro módulo)***: Podrá visualizar turnos, historial y vacunas de su mascota.
 
 ---
 
@@ -72,27 +74,53 @@ SUPERADMIN_NAME=superadmin
 #ResetPassword
 RESET_PASSWORD_DEFAULT=saluvet123
 
+#ScheduleConfigDayVariables
+DEFAULT_STARTIME=8
+DEFAULT_ENDTIME=16
+
 ```
 
 ---
 
-## Instalación del proyecto
+## 💻 Instalación paso a paso
 
+### 1. Clonar el proyecto e instalar dependencias.
 ```bash
-$ npm install
-$ npx prisma migrate dev
+git clone https://github.com/RafaToresani/SaluVet-backend.git
+cd saluvet
+npm install
 ```
-
-## Compilar y correr el proyecto
+### 2. Crear base de datos mysql vacía.
+(usar el nombre que hayas definido en .env)
+```sql
+CREATE DATABASE saluvet_db;
+```
+### 3. Aplicar migraciones con Prisma.
+```bash
+npx prisma migrate dev
+```
+### 4. Compilar y correr el proyecto
 
 ```bash
 # development
-$ npm run start
+ npm run start
 
 # watch mode
-$ npm run start:dev
+ npm run start:dev
 
 # production mode
-$ npm run start:prod
+ npm run start:prod
+```
+### 5. Ingresar a swagger
+```bash
+http://localhost:7500/docs
+
 ```
 
+### 6. Ingresar con el superadmin creado automáticamente (según tu .env) y empezar a probar el sistema.
+```json
+{
+  "email": "superadmin@saluvet.com",
+  "password": "password123"
+}
+```
