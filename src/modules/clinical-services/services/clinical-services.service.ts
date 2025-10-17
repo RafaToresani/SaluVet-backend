@@ -51,15 +51,16 @@ export class ClinicalServicesService {
   }
 
   async updateClinicalService(
+    id: string,
     request: ClinicalServiceForUpdateDto,
   ): Promise<ClinicalServiceResponse> {
-    const clinicalService = await this.getClinicalServiceById(request.id);
+    const clinicalService = await this.getClinicalServiceById(id);
     if (!clinicalService) {
       throw new BadRequestException('El servicio no existe');
     }
 
     const existsByName = await this.getClinicalServiceByName(request.name!);
-    if (existsByName && existsByName.id !== request.id) {
+    if (existsByName && existsByName.id !== id) {
       throw new BadRequestException(
         'El nombre del servicio no está disponible',
       );
@@ -122,7 +123,6 @@ export class ClinicalServicesService {
         isActive: newIsActive,
       },
     });
-  
     return updated;
   }
 

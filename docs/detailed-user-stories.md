@@ -263,10 +263,8 @@ Como Superadmin, quiero poder resetear la contraseña de un usuario, para asisti
 ### ✅ Criterios de Aceptación
 
 - **CA-01:** El endpoint requiere el id del usuario. Si no existe, devuelve 404 Not Found.
-- **CA-02:** Al llamar a la ruta, el campo isActive del usuario debe cambiar a false y visceversa.
-- **CA-03:** Un usuario inactivo no puede iniciar sesión (Validado por HU-G-01 y CA-05).
-- **CA-04:** No se debe permitir desactivar al Superadmin actual.
-- **CA-05:** Debe implementar validación (futuro).
+- **CA-02:** Se debe obtener la contraseña generica definida en .env. En caso de no existir se retorna InternalServerError
+- **CA-03:** La contraseña debe ser hasheada.
 
 
 ### 📦 Request Body (Input)
@@ -282,7 +280,156 @@ Como Superadmin, quiero poder resetear la contraseña de un usuario, para asisti
     "isActive": false
   },
   "message": "Solicitud exitosa",
-  "timestamp": "2025-10-17T20:49:14.653Z"
+  "timestamp": "2025-10-17T21:08:10.807Z"
+}
+```
+---
+**ID:** `HU-SA-06`  
+**Título:** _[Creación de Servicios Clínicos]_  
+**Rol:** _[Superadmin]_
+
+### 📝 Descripción
+
+Como Superadmin, quiero registrar nuevos servicios que ofrece la clínica, para ampliar el catálogo.
+
+### 🔧 Detalles Técnicos
+
+- **Método:** `POST`
+- **Ruta:** `/api/v1/clinical-services`
+- **Roles Permitidos:** `[Superadmin]`
+
+### ✅ Criterios de Aceptación
+
+- **CA-01:** Se requiere un name, descripción, price, duration e isActive.
+- **CA-02:** El nombre debe ser único, si existe se debe lanzar BadRequestException
+- **CA-03:** Además, se debe relacionar con todos los usuarios activos existentes.
+
+### 📦 DTO de Entrada (`ClinicalServiceForCreationDto`)
+
+| Campo        | Tipo     | Requerido | Descripción                      |
+| :---------   | :------- | :-------- | :--------------------------------|
+| `name`       | `string` | Si        | Nombre del servicio (único)      |
+| `descripcion`| `string` | Si        | descripción del servicio.        |
+| `price`      | `number` | Si        | Valor del serivicio              |
+| `duration`   | `number` | Si        | Duración del serivicio en minutos|
+| `isActive`   | `boolean`| Si        | Estado del servicio.             |
+
+
+### 📦 Request Body (Input)
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "5603e0c2-2e7d-4ea4-9ebc-fe3e1363eed1",
+    "name": "Consulta de rutina",
+    "description": "Consulta de rutina",
+    "price": 1000,
+    "duration": 30,
+    "isActive": true
+  },
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-17T21:29:59.596Z"
+}
+```
+---
+**ID:** `HU-SA-07`  
+**Título:** _[Edición de Servicios Clínicos]_  
+**Rol:** _[Superadmin]_
+
+### 📝 Descripción
+
+Como Superadmin, quiero modificar el nombre o la descripción de un servicio existente, para actualizar la información del catálogo.
+
+### 🔧 Detalles Técnicos
+
+- **Método:** `PATCH`
+- **Ruta:** `/api/v1/clinical-services/{id}`
+- **Roles Permitidos:** `[Superadmin]`
+
+### ✅ Criterios de Aceptación
+
+- **CA-01:** La ruta debe estar protegida y solo ser accesible para usuarios con el rol Superadmin (Verificado: @UseGuards(..., RolesGuard) @Roles(EUserRole.SUPERADMIN)).
+- **CA-02:** Si el servicio con el :id proporcionado no existe, se devuelve una excepción 400 Bad Request con el mensaje "El servicio no existe".
+- **CA-03:** Se permite enviar uno, varios o todos los campos del DTO para su actualización.
+- **CA-03:** Si se incluye el campo name, el sistema valida que el nuevo nombre sea único entre todos los servicios excepto el que se está editando (existsByName.id !== id). Si el nombre está en uso, se devuelve 400 Bad Request con el mensaje "El nombre del servicio no está disponible".
+- **CA-03:** En caso de éxito, se devuelve el objeto actualizado (ClinicalServiceResponse) con un código 200 OK.
+
+### 📦 DTO de Entrada (`ClinicalServiceForUpdateDto`)
+
+| Campo        | Tipo     | Requerido | Descripción                      |
+| :---------   | :------- | :-------- | :--------------------------------|
+| `name`       | `string` | No        | Nombre del servicio (único)      |
+| `descripcion`| `string` | No        | descripción del servicio.        |
+| `price`      | `number` | No        | Valor del serivicio              |
+| `duration`   | `number` | No        | Duración del serivicio en minutos|
+| `isActive`   | `boolean`| No        | Estado del servicio.             |
+
+
+### 📦 Request Body (Input)
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "7b1adab0-5553-4d21-9060-074547cfb230",
+    "name": "Consulta de rutina II",
+    "description": "Consulta de rutina II",
+    "price": 1000,
+    "duration": 30,
+    "isActive": true
+  },
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-17T21:40:39.203Z"
+}
+```
+---
+**ID:** `HU-SA-08`  
+**Título:** _[Activar/desactivar servicio asociado a veterinario]_  
+**Rol:** _[Superadmin]_
+
+### 📝 Descripción
+
+Como Superadmin, quiero habilitar (activar) o deshabilitar (desactivar) un servicio clínico que ya está asociado a un veterinario, para controlar qué servicios puede ofrecer dicho profesional sin eliminar la asociación histórica.
+
+### 🔧 Detalles Técnicos
+
+- **Método:** `PATCH`
+- **Ruta:** `/api/v1/clinical-services/toggle-user-clinical-service`
+- **Roles Permitidos:** `[Superadmin]`
+
+### ✅ Criterios de Aceptación
+
+- **CA-01:** La ruta debe estar protegida y solo ser accesible para usuarios con el rol Superadmin.
+- **CA-02:** El sistema debe buscar la relación (UserClinicalService) entre el userId y el clinicalServiceId en la base de datos.
+- **CA-03:** Si la relación no existe (el veterinario nunca ha tenido asignado ese servicio), se devuelve una excepción 400 Bad Request con el mensaje "El veterinario no tiene habilitado este servicio".
+- **CA-04:** Si la relación existe, el campo isActive se invierte: si era true pasa a ser false, y viceversa.
+- **CA-05:** En caso de éxito, se devuelve el objeto actualizado (ClinicalServiceResponse) con un código 200 OK. (futuro)
+
+### 📦 DTO de Entrada (`Query Parameters`)
+
+| Campo              | Tipo           | Requerido | Descripción    |
+| :---------         | :-------       | :-------- | :------------- |
+| `userId`           | `string`       | Si        | id del usuario |
+| `clinicalServiceId`| `string`       | Si        | id del servicio|
+
+
+
+### 📦 Request Body (Input)
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "be1ad5b0-94b8-430d-ac8e-c7602b75b98b",
+    "userId": "d6cc56ee-8de4-4a06-8c07-cf6ee7213ea5",
+    "clinicalServiceId": "03bda783-82d1-4f73-be2a-514cff13d036",
+    "isActive": true,
+    "createdAt": "2025-10-17T21:55:33.788Z",
+    "updatedAt": "2025-10-17T22:06:32.898Z"
+  },
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-17T22:06:32.900Z"
 }
 ```
 ---

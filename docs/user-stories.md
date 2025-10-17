@@ -5,6 +5,7 @@
 ### 👤 General
 
 * **HU-G-01:** Como usuario registrado, quiero poder iniciar sesión en el sistema, para acceder a mis funciones autorizadas.
+* **HU-G-01:** Como usuario, quiero consultar la lista de servicios activos para usarlos en la gestión de turnos o registros médicos.
 
 ### 👑 Superadmin
 * **HU-SA-01:** Como Superadmin, quiero registrar nuevos usuarios con roles Recepcionista o Veterinario, para incorporar nuevo personal al sistema.
@@ -12,6 +13,9 @@
 * **HU-SA-03:** Como Superadmin, quiero consultar la lista de todo el personal (R y V), con capacidad de filtrar y paginar, para tener una visión general del equipo.
 * **HU-SA-04:** Como Superadmin, quiero cambiar el estado de un usuario a inactivo, para revocar su acceso sin eliminar su historial.
 * **HU-SA-05:** Como Superadmin, quiero poder resetear la contraseña de un usuario, para asistir en casos de bloqueo o pérdida.
+* **HU-SA-06:** Como Superadmin, quiero registrar nuevos servicios que ofrece la clínica, para ampliar el catálogo.
+* **HU-SA-07:** Como Superadmin, quiero modificar el nombre, descripción, precio, duración de un servicio existente, para actualizar la información del catálogo.
+* **HU-SA-08:** Como Superadmin, quiero desactivar o desactivar un servicio clínico asociado a un veterinario.
 
 
 <!-- ### 👑 Superadmin

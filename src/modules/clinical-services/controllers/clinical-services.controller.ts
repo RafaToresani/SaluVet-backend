@@ -33,17 +33,6 @@ export class ClinicalServicesController {
     return this.clinicalServicesService.getAllClinicalServices();
   }
 
-  @Patch()
-  @ApiOperation({ summary: 'Actualizar un servicio clínico' })
-  @ApiResponse({ status: 200, description: 'Servicio clínico actualizado exitosamente' })
-  @ApiResponse({ status: 400, description: 'Error al actualizar el servicio clínico' })
-  @ApiBearerAuth('JWT-auth')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(EUserRole.SUPERADMIN)
-  async updateClinicalService(@Body() request: ClinicalServiceForUpdateDto): Promise<ClinicalServiceResponse> {
-    return this.clinicalServicesService.updateClinicalService(request);
-  }
-
   @Patch('toggle-user-clinical-service')
   @ApiOperation({ summary: 'Activar o desactivar un servicio clínico para un veterinario' })
   @ApiResponse({ status: 200, description: 'Servicio clínico activado o desactivado exitosamente' })
@@ -54,6 +43,19 @@ export class ClinicalServicesController {
   async toggleUserClinicalService(@Query('userId') userId: string, @Query('clinicalServiceId') clinicalServiceId: string){
     return this.clinicalServicesService.toggleUserClinicalService(userId, clinicalServiceId);
   }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Actualizar un servicio clínico' })
+  @ApiResponse({ status: 200, description: 'Servicio clínico actualizado exitosamente' })
+  @ApiResponse({ status: 400, description: 'Error al actualizar el servicio clínico' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(EUserRole.SUPERADMIN)
+  async updateClinicalService(@Param('id') id: string, @Body() request: ClinicalServiceForUpdateDto): Promise<ClinicalServiceResponse> {
+    return this.clinicalServicesService.updateClinicalService(id, request);
+  }
+
+
 
   @Delete(':id')
   @ApiOperation({ summary: 'Eliminar un servicio clínico' })

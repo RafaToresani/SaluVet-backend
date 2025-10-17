@@ -9,13 +9,6 @@ import {
 } from 'class-validator';
 
 export class ClinicalServiceForUpdateDto {
-  @ApiProperty({
-    description: 'ID del servicio',
-    example: '1',
-  })
-  @IsNotEmpty()
-  @IsString()
-  id: string;
 
   @ApiProperty({
     description: 'Nombre del servicio',
