@@ -48,7 +48,7 @@ NestJS - TypeScript - MySQL - Prisma - Swagger - JWT
 ## Variables de entorno
 
 En un archivo llamado ``.env`` copiar y pegar las siguientes variables de entorno.
-```
+```.env
 NODE_ENV=development
 PORT=7500
 VERSION=v1

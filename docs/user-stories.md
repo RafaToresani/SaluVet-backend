@@ -2,10 +2,14 @@
 
 ## Historias de usuario
 
+### 👤 General
+
+* **HU-G-01:** Como usuario registrado, quiero poder iniciar sesión en el sistema, para acceder a mis funciones autorizadas.
+
+
 ### 👑 Superadmin
 
 * **HU-01:** Como Superadmin, quiero que se cree automáticamente mi usuario con las credenciales del `.env` al iniciar la app, para tener acceso inicial sin intervención manual.
-* **HU-02:** Como Superadmin, quiero poder iniciar sesión en el sistema, para acceder a mis funciones autorizadas.
 * **HU-03:** Como Superadmin, quiero crear, editar, listar y desactivar usuarios recepcionistas y veterinario, para gestionar al personal de recepción y de veterinaria.
 * **HU-04:** Como Superadmin, quiero poder resetear la contraseña de un usuario, para asistir en casos de bloqueo o pérdida.
 * **HU-23**: Como Superadmin, quiero crear, editar, listar y eliminar los servicios que ofrece la clínica (como consultas, vacunación, etc.), para mantener actualizado el catálogo.
