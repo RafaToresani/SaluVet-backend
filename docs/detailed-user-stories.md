@@ -50,6 +50,47 @@ Como usuario registrado, quiero poder iniciar sesión en el sistema, para accede
   "timestamp": "2025-10-17T20:00:50.399Z"
 }
 ```
+---
+**ID:** `HU-G-02`  
+**Título:** _[Consulta del Catálogo de Servicios Clínicos]_  
+**Rol:** _[No requiere]_
+
+### 📝 Descripción
+
+Como cualquier usuario, quiero consultar la lista de servicios activos para usarlos en la gestión de turnos o registros médicos.
+
+### 🔧 Detalles Técnicos
+
+- **Método:** `GET`
+- **Ruta:** `/api/v1/clinical-services`
+- **Roles Permitidos:** `[No requiere]`
+
+### ✅ Criterios de Aceptación
+
+- **CA-01:** Por defecto, solo se listan los servicios que están activos (isActive: true).
+- **CA-02:** La respuesta debe incluir el id, name, price, duration y description.
+- **CA-03:** La lista debe ser accesible para todos.
+- **CA-04:** Implementar paginación (futuro)
+
+### 📦 Request Body (Input)
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "03bda783-82d1-4f73-be2a-514cff13d036",
+      "name": "Castración macho",
+      "description": "Procedimiento quirúrgico de esterilización para machos.",
+      "price": 4500,
+      "duration": 60,
+      "isActive": true
+    }
+  ],
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-17T22:18:10.753Z"
+}
+```
 
 ---
 ## 👑 Superadmin
