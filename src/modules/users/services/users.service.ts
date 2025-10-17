@@ -7,7 +7,6 @@ import { UserResponse } from '../dto/user.response';
 import { userToUserResponse } from 'src/common/mappers/user.mapper';
 import { UserForUpdateDto } from '../dto/userForUpdateDto.dto';
 import { UpdatePasswordDto } from '../dto/updatePasswordDto.dto';
-import { UserForUpdateDtoBySuperAdminDto } from '../dto/userForUpdateDtoBySuperAdminDto.dto';
 import { ConfigService } from '@nestjs/config';
 import { ScheduleConfigService } from 'src/modules/schedule/services/schedule-config.service';
 import { ClinicalServicesService } from 'src/modules/clinical-services/services/clinical-services.service';
@@ -89,6 +88,7 @@ export class UsersService {
       },
     });
     if(!userFound) throw new NotFoundException('Usuario no encontrado');
+    if(userFound.role === EUserRole.SUPERADMIN) throw new ForbiddenException('No es posible desactivar un superadmin');
     const user = await this.prisma.user.update({
       where: {
         id,
@@ -123,7 +123,7 @@ export class UsersService {
     return userToUserResponse(user);
   }
 
-  async updateUserBySuperadmin(id: string, request: UserForUpdateDtoBySuperAdminDto): Promise<UserResponse> {
+  async updateUserBySuperadmin(id: string, request: UserForUpdateDto): Promise<UserResponse> {
     const userFound = await this.prisma.user.findUnique({
       where: {
         id,
@@ -134,7 +134,6 @@ export class UsersService {
       const existingUser = await this.findByEmail(request.email);
       if(existingUser) throw new ConflictException('El email ya está registrado');
     }
-    if(request.role === EUserRole.SUPERADMIN) throw new BadRequestException('No es posible cambiar el rol a superadmin');
     const user = await this.prisma.user.update({
       where: {
         id,
@@ -142,7 +141,6 @@ export class UsersService {
       data: {
         name: request.name ? request.name : userFound.name,
         email: request.email ? request.email : userFound.email,
-        role: request.role ? request.role : userFound.role,
       },
     });
     return userToUserResponse(user);

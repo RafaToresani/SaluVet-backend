@@ -10,7 +10,6 @@ import { GetUsersQueryDto } from '../dto/getUsersQueryDto.dto';
 import { UserForUpdateDto } from '../dto/userForUpdateDto.dto';
 import { UserId } from 'src/common/decorators/user-id.decorator';
 import { UpdatePasswordDto } from '../dto/updatePasswordDto.dto';
-import { UserForUpdateDtoBySuperAdminDto } from '../dto/userForUpdateDtoBySuperAdminDto.dto';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 
 @Controller('users')
@@ -40,6 +39,7 @@ export class UsersController {
   @ApiQuery({ name: 'name', required: false, description: 'Filtrar por nombre de usuario' })
   @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtAuthGuard)
+  @Roles(EUserRole.SUPERADMIN, EUserRole.RECEPCIONISTA)
   getUsers(@Query() query: GetUsersQueryDto): Promise<UserResponse[]>{
     return this.usersService.getUsers(query.role, query.email, query.name);
   }
@@ -78,7 +78,7 @@ export class UsersController {
   @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(EUserRole.SUPERADMIN)
-  updateUserBySuperadmin(@Param('id') id: string, @Body() request: UserForUpdateDtoBySuperAdminDto): Promise<UserResponse>{
+  updateUserBySuperadmin(@Param('id') id: string, @Body() request: UserForUpdateDto): Promise<UserResponse>{
     return this.usersService.updateUserBySuperadmin(id, request);
   }
 

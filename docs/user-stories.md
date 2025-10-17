@@ -6,14 +6,21 @@
 
 * **HU-G-01:** Como usuario registrado, quiero poder iniciar sesión en el sistema, para acceder a mis funciones autorizadas.
 
-
 ### 👑 Superadmin
+* **HU-SA-01:** Como Superadmin, quiero registrar nuevos usuarios con roles Recepcionista o Veterinario, para incorporar nuevo personal al sistema.
+* **HU-SA-02:** Como Superadmin, quiero modificar los datos personales (name, email) de un usuario existente, para mantener la información del personal actualizada.
+* **HU-SA-03:** Como Superadmin, quiero consultar la lista de todo el personal (R y V), con capacidad de filtrar y paginar, para tener una visión general del equipo.
+* **HU-SA-04:** Como Superadmin, quiero cambiar el estado de un usuario a inactivo, para revocar su acceso sin eliminar su historial.
+
+
+
+<!-- ### 👑 Superadmin
 
 * **HU-01:** Como Superadmin, quiero que se cree automáticamente mi usuario con las credenciales del `.env` al iniciar la app, para tener acceso inicial sin intervención manual.
 * **HU-03:** Como Superadmin, quiero crear, editar, listar y desactivar usuarios recepcionistas y veterinario, para gestionar al personal de recepción y de veterinaria.
 * **HU-04:** Como Superadmin, quiero poder resetear la contraseña de un usuario, para asistir en casos de bloqueo o pérdida.
 * **HU-23**: Como Superadmin, quiero crear, editar, listar y eliminar los servicios que ofrece la clínica (como consultas, vacunación, etc.), para mantener actualizado el catálogo.
-* **HU-29**: Como Recepcionista, quiero que al crear un turno, solo pueda seleccionar veterinarios que tengan habilitado el servicio seleccionado, para asegurar que la mascota será atendida por un profesional apto.
+* **HU-29**: Como Recepcionista, quiero que al crear un turno, solo pueda seleccionar veterinarios que tengan habilitado el servicio seleccionado, para asegurar que la mascota será atendida por un profesional apto. -->
 
 ---
 
