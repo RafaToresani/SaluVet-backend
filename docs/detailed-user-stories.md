@@ -206,7 +206,7 @@ Como Superadmin, quiero consultar la lista de todo el personal (R y V), con capa
 }
 ```
 ---
-**ID:** `HU-SA-03`  
+**ID:** `HU-SA-04`  
 **Título:** _[Desactivar/Activar a un usuario]_  
 **Rol:** _[Superadmin]_
 
@@ -218,7 +218,47 @@ Como Superadmin, quiero cambiar el estado de un usuario a inactivo o visceversa,
 
 - **Método:** `PATCH`
 - **Ruta:** `/api/v1/users/superadmin/toggle-active/{id}`
-- **Roles Permitidos:** `[Superadmin, Veterinario]`
+- **Roles Permitidos:** `[Superadmin]`
+
+### ✅ Criterios de Aceptación
+
+- **CA-01:** El endpoint requiere el id del usuario. Si no existe, devuelve 404 Not Found.
+- **CA-02:** Al llamar a la ruta, el campo isActive del usuario debe cambiar a false y visceversa.
+- **CA-03:** Un usuario inactivo no puede iniciar sesión (Validado por HU-G-01 y CA-05).
+- **CA-04:** No se debe permitir desactivar al Superadmin actual.
+- **CA-05:** Debe implementar validación (futuro).
+
+
+### 📦 Request Body (Input)
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "e46f1b20-1025-45cb-b680-2a470b8e9aa8",
+    "name": "John Doe",
+    "email": "example@example.com",
+    "role": "RECEPCIONISTA",
+    "isActive": false
+  },
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-17T20:49:14.653Z"
+}
+```
+---
+**ID:** `HU-SA-05`  
+**Título:** _[Restaurar contraseña de usuario]_  
+**Rol:** _[Superadmin]_
+
+### 📝 Descripción
+
+Como Superadmin, quiero poder resetear la contraseña de un usuario, para asistir en casos de bloqueo o pérdida.
+
+### 🔧 Detalles Técnicos
+
+- **Método:** `PATCH`
+- **Ruta:** `/api/v1/users/superadmin/reset-password-by-default/{id}`
+- **Roles Permitidos:** `[Superadmin]`
 
 ### ✅ Criterios de Aceptación
 

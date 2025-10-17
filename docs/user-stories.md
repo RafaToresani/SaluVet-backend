@@ -11,7 +11,7 @@
 * **HU-SA-02:** Como Superadmin, quiero modificar los datos personales (name, email) de un usuario existente, para mantener la información del personal actualizada.
 * **HU-SA-03:** Como Superadmin, quiero consultar la lista de todo el personal (R y V), con capacidad de filtrar y paginar, para tener una visión general del equipo.
 * **HU-SA-04:** Como Superadmin, quiero cambiar el estado de un usuario a inactivo, para revocar su acceso sin eliminar su historial.
-
+* **HU-SA-05:** Como Superadmin, quiero poder resetear la contraseña de un usuario, para asistir en casos de bloqueo o pérdida.
 
 
 <!-- ### 👑 Superadmin
