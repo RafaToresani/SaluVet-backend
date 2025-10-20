@@ -17,14 +17,19 @@
 * **HU-SA-07:** Como Superadmin, quiero modificar el nombre, descripción, precio, duración de un servicio existente, para actualizar la información del catálogo.
 * **HU-SA-08:** Como Superadmin, quiero desactivar o desactivar un servicio clínico asociado a un veterinario.
 
+### 📅 Recepcionista
+* **HU-R-01:** Como Recepcionista, quiero registrar nuevos dueños de mascotas, para tener sus datos disponibles en el sistema.
+* **HU-R-02:** Como Recepcionista, quiero editar la información de los dueños, para corregir o actualizar datos.
+* **HU-R-03:** Como Recepcionista, quiero registrar nuevas mascotas asociadas a un dueño, para tener el control de los pacientes.
+* **HU-R-04:** Como Recepcionista, quiero editar los datos de las mascotas, para corregir información cuando sea necesario.
 
 <!-- ### 👑 Superadmin
 
 * **HU-01:** Como Superadmin, quiero que se cree automáticamente mi usuario con las credenciales del `.env` al iniciar la app, para tener acceso inicial sin intervención manual.
 * **HU-03:** Como Superadmin, quiero crear, editar, listar y desactivar usuarios recepcionistas y veterinario, para gestionar al personal de recepción y de veterinaria.
 * **HU-04:** Como Superadmin, quiero poder resetear la contraseña de un usuario, para asistir en casos de bloqueo o pérdida.
-* **HU-23**: Como Superadmin, quiero crear, editar, listar y eliminar los servicios que ofrece la clínica (como consultas, vacunación, etc.), para mantener actualizado el catálogo.
-* **HU-29**: Como Recepcionista, quiero que al crear un turno, solo pueda seleccionar veterinarios que tengan habilitado el servicio seleccionado, para asegurar que la mascota será atendida por un profesional apto. -->
+* **HU-23**: Como Superadmin, quiero crear, editar, listar y eliminar los servicios que ofrece la clínica (como consultas, vacunación, etc.), para mantener actualizado el catálogo. -->
+* **HU-29**: Como Recepcionista, quiero que al crear un turno, solo pueda seleccionar veterinarios que tengan habilitado el servicio seleccionado, para asegurar que la mascota será atendida por un profesional apto.
 
 ---
 

@@ -34,6 +34,8 @@ export class OwnersService {
       throw new BadRequestException(
         'El teléfono ingresado ya está registrado.',
       );
+    if(await this.findOwnerByEmail(owner.email))
+      throw new BadRequestException('El email ingresado ya está registrado.');
 
     const newOwner = await this.prisma.owner.create({
       data: owner,
@@ -41,6 +43,7 @@ export class OwnersService {
 
     return ownerToResponse(newOwner);
   }
+
 
   async searchOwners(
     metaQuery?: MetaQueryDto,
@@ -99,13 +102,17 @@ export class OwnersService {
       if (ownerWithSameDni && ownerWithSameDni.id !== request.id)
         throw new BadRequestException('El dni ingresado ya está registrado.');
     }
-
     if (request.phone) {
       const ownerWithSamePhone = await this.findOwnerByPhone(request.phone);
       if (ownerWithSamePhone && ownerWithSamePhone.id !== request.id)
         throw new BadRequestException(
           'El teléfono ingresado ya está registrado.',
         );
+    }
+    if (request.email) {
+      const ownerWithSameEmail = await this.findOwnerByEmail(request.email);
+      if (ownerWithSameEmail && ownerWithSameEmail.id !== request.id)
+        throw new BadRequestException('El email ingresado ya está registrado.');
     }
 
     const updatedOwner = await this.prisma.owner.update({
@@ -143,6 +150,14 @@ export class OwnersService {
     return await this.prisma.owner.findUnique({
       where: {
         dni,
+      },
+    });
+  }
+
+  async findOwnerByEmail(email: string): Promise<Owner | null> {
+    return await this.prisma.owner.findFirst({
+      where: {
+        email: email,
       },
     });
   }
