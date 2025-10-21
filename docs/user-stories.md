@@ -27,6 +27,8 @@
 * **HU-R-07:** Como Recepcionista, quiero reprogramar un turno existente cambiando la fecha y/o la hora de inicio, para gestionar cambios en la agenda médica, respetando la disponibilidad del veterinario y evitando solapamientos con otros turnos.
 * **HU-R-08:** Como usuario autorizado (Recepcionista, Veterinario o Superadmin), quiero actualizar el estado de un turno, para poder marcarlo como **cancelado**, **pendiente**, o cualquier otro estado definido, y así mantener la agenda actualizada y reflejar cambios en tiempo real.
 * **HU-R-09:** Como Recepcionista, quiero ver la lista de turnos del día, ordenados por horario, para organizar mi trabajo.
+* **HU-R-10:** Como Recepcionista, quiero ver el historial de turnos de una mascota, para responder consultas de los dueños.
+
 
 <!-- ### 👑 Superadmin
 

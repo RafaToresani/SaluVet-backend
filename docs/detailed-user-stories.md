@@ -704,7 +704,7 @@ Como Recepcionista, quiero actualizar los datos de una mascota existente (nombre
 }
 ```
 ---
-**ID:** `HU-R-13`  
+**ID:** `HU-R-05`  
 **Título:** _[Buscar dueños y sus mascotas]_  
 **Rol:** _[Recepcionista]_  
 
@@ -1068,11 +1068,12 @@ Como Recepcionista, quiero ver la lista de turnos correspondientes a una fecha e
 ### ✅ Criterios de Aceptación (según comportamiento actual)
 - **CA-01:** La ruta debe estar protegida y solo accesible mediante autenticación JWT.  
 - **CA-02:** Solo los roles `Recepcionista` y `Superadmin` pueden acceder al endpoint.  
-- **CA-03:** El parámetro `date` debe enviarse en el query; en caso de no estar presente, se devuelve un error desde la capa de validación o el endpoint.  
-- **CA-04:** Se deben retornar todas las citas (appointments) cuya fecha coincida con la solicitada.  
-- **CA-05:** La información de cada cita debe incluir los datos relacionados (`vet`, `pet`, `owner`, `services`, etc.) según lo definido en `AppointmentResponse`.  
-- **CA-06:** Los resultados se devuelven en una lista (`AppointmentResponse[]`) con código `200 OK`.  
-- **CA-07:** Si no se encuentran citas para la fecha indicada, se devuelve una lista vacía (`[]`) dentro del campo `data`.  
+- **CA-03:** El parámetro `date` debe enviarse en el query; si no se puede convertir a una fecha válida, se devuelve un `400 Bad Request` con el mensaje `Fecha inválida`.  
+- **CA-04:** Se deben retornar todas las citas cuya fecha se encuentre dentro del rango horario completo del día indicado (`00:00:00` a `23:59:59`).  
+- **CA-05:** Los resultados deben estar ordenados de forma ascendente según el campo `startTime`.  
+- **CA-06:** Cada cita debe incluir la información relacionada (`vet`, `pet`, `owner`, `services`, etc.) conforme a `AppointmentResponse`.  
+- **CA-07:** La respuesta debe devolverse con un arreglo de `AppointmentResponse[]` y código `200 OK`.  
+- **CA-08:** Si no existen citas para la fecha consultada, se debe retornar una lista vacía (`[]`) dentro del campo `data` con código `200 OK`.  
 
 ### 📦 Parámetro Query de Entrada
 
@@ -1081,7 +1082,7 @@ Como Recepcionista, quiero ver la lista de turnos correspondientes a una fecha e
 | `date`  | `Date` | Sí        | Fecha a consultar en formato `YYYY-MM-DD` o ISO |
 
 ### 📦 Ejemplo de Request  
-```
+```http
 GET /api/v1/appointments/by-date?date=2025-10-22
 ```
 
@@ -1145,5 +1146,4 @@ GET /api/v1/appointments/by-date?date=2025-10-22
   "message": "Solicitud exitosa",
   "timestamp": "2025-10-21T18:32:12.539Z"
 }
-```
----
+````
