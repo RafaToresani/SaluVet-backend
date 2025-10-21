@@ -4,9 +4,49 @@
 
 ### Índice
 
+#### 📋 Navegación Rápida
+
+**👦🏻 General**
+- [HU-G-01: Iniciar sesión en el sistema](#hu-g-01-iniciar-sesión-en-el-sistema)
+- [HU-G-02: Consulta del Catálogo de Servicios Clínicos](#hu-g-02-consulta-del-catálogo-de-servicios-clínicos)
+
+**👑 Superadmin**
+- [HU-SA-01: Crear usuarios del sistema](#hu-sa-01-crear-usuarios-del-sistema)
+- [HU-SA-02: Actualizar un usuario](#hu-sa-02-actualizar-un-usuario)
+- [HU-SA-03: Listado y Búsqueda de Personal](#hu-sa-03-listado-y-búsqueda-de-personal)
+- [HU-SA-04: Desactivar/Activar a un usuario](#hu-sa-04-desactivaractivar-a-un-usuario)
+- [HU-SA-05: Restaurar contraseña de usuario](#hu-sa-05-restaurar-contraseña-de-usuario)
+- [HU-SA-06: Creación de Servicios Clínicos](#hu-sa-06-creación-de-servicios-clínicos)
+- [HU-SA-07: Edición de Servicios Clínicos](#hu-sa-07-edición-de-servicios-clínicos)
+- [HU-SA-08: Activar/desactivar servicio asociado a veterinario](#hu-sa-08-activardesactivar-servicio-asociado-a-veterinario)
+
+**📅 Recepcionista**
+- [HU-R-01: Registrar nuevo dueño](#hu-r-01-registrar-nuevo-dueño)
+- [HU-R-02: Actualizar dueño existente](#hu-r-02-actualizar-dueño-existente)
+- [HU-R-03: Registrar nueva mascota](#hu-r-03-registrar-nueva-mascota)
+- [HU-R-04: Actualizar datos de la mascota](#hu-r-04-actualizar-datos-de-la-mascota)
+- [HU-R-05: Buscar dueños y sus mascotas](#hu-r-05-buscar-dueños-y-sus-mascotas)
+- [HU-R-06: Crear turno para mascota](#hu-r-06-crear-turno-para-mascota)
+- [HU-R-07: Reprogramar un turno](#hu-r-07-reprogramar-un-turno)
+- [HU-R-08: Actualizar estado de un turno](#hu-r-08-actualizar-estado-de-un-turno)
+- [HU-R-09: Listar turnos del día por fecha](#hu-r-09-listar-turnos-del-día-por-fecha)
+- [HU-R-10: Ver historial de turnos de una mascota](#hu-r-10-ver-historial-de-turnos-de-una-mascota)
+
+**👨‍⚕️ Veterinario**
+- [HU-V-01: Listar turnos del día del veterinario](#hu-v-01-listar-turnos-del-día-del-veterinario)
+- [HU-V-02: Registrar historial médico de una mascota](#hu-v-02-registrar-historial-médico-de-una-mascota)
+- [HU-V-03: Editar historial médico de una mascota](#hu-v-03-editar-historial-médico-de-una-mascota)
+- [HU-V-04: Registrar vacuna aplicada a una mascota](#hu-v-04-registrar-vacuna-aplicada-a-una-mascota)
+- [HU-V-05: Actualizar vacuna registrada](#hu-v-05-actualizar-vacuna-registrada)
+- [HU-V-06: Eliminar una vacuna](#hu-v-06-eliminar-una-vacuna)
+- [HU-V-07: Ver agenda semanal del veterinario](#hu-v-07-ver-agenda-semanal-del-veterinario)
+- [HU-V-08: Modificar horarios de agenda del veterinario](#hu-v-08-modificar-horarios-de-agenda-del-veterinario)
+
 ---
 
 ## 👦🏻 General
+
+#### HU-G-01: Iniciar sesión en el sistema
 
 **ID:** `HU-G-01`  
 **Título:** _[Iniciar sesión en el sistema]_  
@@ -51,6 +91,8 @@ Como usuario registrado, quiero poder iniciar sesión en el sistema, para accede
 }
 ```
 ---
+#### HU-G-02: Consulta del Catálogo de Servicios Clínicos
+
 **ID:** `HU-G-02`  
 **Título:** _[Consulta del Catálogo de Servicios Clínicos]_  
 **Rol:** _[No requiere]_
@@ -94,6 +136,8 @@ Como cualquier usuario, quiero consultar la lista de servicios activos para usar
 
 ---
 ## 👑 Superadmin
+
+#### HU-SA-01: Crear usuarios del sistema
 
 **ID:** `HU-SA-01`  
 **Título:** _[Crear usuarios del sistema]_  
@@ -146,6 +190,8 @@ Como Superadmin, quiero registrar nuevos usuarios con roles Recepcionista o Vete
 ```
 
 ---
+#### HU-SA-02: Actualizar un usuario
+
 **ID:** `HU-SA-02`  
 **Título:** _[Actualizar un usuario]_  
 **Rol:** _[Superadmin]_
@@ -191,6 +237,8 @@ Como Superadmin, quiero modificar los datos personales (name, email, role) de un
 }
 ```
 ---
+#### HU-SA-03: Listado y Búsqueda de Personal
+
 **ID:** `HU-SA-03`  
 **Título:** _[Listado y Búsqueda de Personal]_  
 **Rol:** _[Superadmin]_
@@ -247,6 +295,8 @@ Como Superadmin, quiero consultar la lista de todo el personal (R y V), con capa
 }
 ```
 ---
+#### HU-SA-04: Desactivar/Activar a un usuario
+
 **ID:** `HU-SA-04`  
 **Título:** _[Desactivar/Activar a un usuario]_  
 **Rol:** _[Superadmin]_
@@ -287,6 +337,8 @@ Como Superadmin, quiero cambiar el estado de un usuario a inactivo o visceversa,
 }
 ```
 ---
+#### HU-SA-05: Restaurar contraseña de usuario
+
 **ID:** `HU-SA-05`  
 **Título:** _[Restaurar contraseña de usuario]_  
 **Rol:** _[Superadmin]_
@@ -325,6 +377,8 @@ Como Superadmin, quiero poder resetear la contraseña de un usuario, para asisti
 }
 ```
 ---
+#### HU-SA-06: Creación de Servicios Clínicos
+
 **ID:** `HU-SA-06`  
 **Título:** _[Creación de Servicios Clínicos]_  
 **Rol:** _[Superadmin]_
@@ -374,6 +428,8 @@ Como Superadmin, quiero registrar nuevos servicios que ofrece la clínica, para 
 }
 ```
 ---
+#### HU-SA-07: Edición de Servicios Clínicos
+
 **ID:** `HU-SA-07`  
 **Título:** _[Edición de Servicios Clínicos]_  
 **Rol:** _[Superadmin]_
@@ -425,6 +481,8 @@ Como Superadmin, quiero modificar el nombre o la descripción de un servicio exi
 }
 ```
 ---
+#### HU-SA-08: Activar/desactivar servicio asociado a veterinario
+
 **ID:** `HU-SA-08`  
 **Título:** _[Activar/desactivar servicio asociado a veterinario]_  
 **Rol:** _[Superadmin]_
@@ -473,6 +531,9 @@ Como Superadmin, quiero habilitar (activar) o deshabilitar (desactivar) un servi
 ```
 ---
 ## 📅 Recepcionista
+
+#### HU-R-01: Registrar nuevo dueño
+
 **ID:** `HU-R-01`  
 **Título:** _[Registrar nuevo dueño]_  
 **Rol:** _[Recepcionista]_  
@@ -531,6 +592,8 @@ Como Recepcionista, quiero registrar un nuevo dueño de mascota ingresando sus d
 }
 ```
 ---
+#### HU-R-02: Actualizar dueño existente
+
 **ID:** `HU-R-02`  
 **Título:** _[Actualizar dueño existente]_  
 **Rol:** _[Recepcionista]_  
@@ -591,6 +654,8 @@ Como Recepcionista, quiero actualizar los datos de un dueño de mascota existent
 }
 ```
 ---
+#### HU-R-03: Registrar nueva mascota
+
 **ID:** `HU-R-03`  
 **Título:** _[Registrar nueva mascota]_  
 **Rol:** _[Recepcionista]_  
@@ -649,6 +714,8 @@ Como Recepcionista, quiero registrar una nueva mascota asociándola a un dueño 
 }
 ```
 ---
+#### HU-R-04: Actualizar datos de la mascota
+
 **ID:** `HU-R-04`  
 **Título:** _[Actualizar datos de la mascota]_  
 **Rol:** _[Recepcionista]_  
@@ -704,6 +771,8 @@ Como Recepcionista, quiero actualizar los datos de una mascota existente (nombre
 }
 ```
 ---
+#### HU-R-05: Buscar dueños y sus mascotas
+
 **ID:** `HU-R-05`  
 **Título:** _[Buscar dueños y sus mascotas]_  
 **Rol:** _[Recepcionista]_  
@@ -789,6 +858,8 @@ GET /api/v1/owners/search?searchTerm=Juan&page=1&size=5&sort=ASC
 }
 ```
 ---
+#### HU-R-06: Crear turno para mascota
+
 **ID:** `HU-R-06`  
 **Título:** _[Crear turno para mascota]_  
 **Rol:** _[Recepcionista]_  
@@ -910,6 +981,8 @@ Como Recepcionista, quiero crear un turno para una mascota con un veterinario es
 }
 ```
 ---
+#### HU-R-07: Reprogramar un turno
+
 **ID:** `HU-R-07`  
 **Título:** _[Reprogramar un turno]_  
 **Rol:** _[Recepcionista]_  
@@ -952,6 +1025,8 @@ Como Recepcionista, quiero reprogramar un turno existente cambiando la fecha y/o
 }
 ```
 ---
+#### HU-R-08: Actualizar estado de un turno
+
 **ID:** `HU-R-08`  
 **Título:** _[Actualizar estado de un turno]_  
 **Rol:** _[Recepcionista / Veterinario / Superadmin]_
@@ -1049,6 +1124,8 @@ PATCH /api/v1/appointments/update-status/a1013f43-1b69-495c-9606-462b6bc4507d?st
 }
 ```
 ---
+#### HU-R-09: Listar turnos del día por fecha
+
 **ID:** `HU-R-09`  
 **Título:** _[Listar turnos del día por fecha]_  
 **Rol:** _[Recepcionista]_  
@@ -1148,6 +1225,8 @@ GET /api/v1/appointments/by-date?date=2025-10-22
 }
 ```
 ---
+#### HU-R-10: Ver historial de turnos de una mascota
+
 **ID:** `HU-R-10`  
 **Título:** _[Ver historial de turnos de una mascota]_  
 **Rol:** _[Recepcionista]_  
@@ -1249,6 +1328,8 @@ GET /api/v1/appointments/by-pet/6d92a372-db64-4369-92f7-55d9fa600a12
 
 ## 👨‍⚕️ Veterinario
 
+#### HU-V-01: Listar turnos del día del veterinario
+
 **ID:** `HU-V-01`  
 **Título:** _[Listar turnos del día del veterinario]_  
 **Rol:** _[Veterinario]_  
@@ -1348,6 +1429,8 @@ GET /api/v1/appointments/by-vet/my?date=2025-10-22
 }
 ```
 ---
+#### HU-V-02: Registrar historial médico de una mascota
+
 **ID:** `HU-V-02`  
 **Título:** _[Registrar historial médico de una mascota]_  
 **Rol:** _[Veterinario]_  
@@ -1412,6 +1495,8 @@ Como Veterinario, quiero registrar consultas médicas (diagnóstico, tratamiento
 }
 ```
 ---
+#### HU-V-03: Editar historial médico de una mascota
+
 **ID:** `HU-V-03`  
 **Título:** _[Editar historial médico de una mascota]_  
 **Rol:** _[Veterinario]_  
@@ -1464,6 +1549,8 @@ Como Veterinario, quiero editar o actualizar consultas médicas ya registradas, 
 }
 ```
 ---
+#### HU-V-04: Registrar vacuna aplicada a una mascota
+
 **ID:** `HU-V-04`  
 **Título:** _[Registrar vacuna aplicada a una mascota]_  
 **Rol:** _[Veterinario]_  
@@ -1533,6 +1620,8 @@ POST /api/v1/medical-records/vaccines?medicalRecordId=123e4567-e89b-12d3-a456-42
 }
 ```
 ---
+#### HU-V-05: Actualizar vacuna registrada
+
 **ID:** `HU-V-05`  
 **Título:** _[Actualizar vacuna registrada]_  
 **Rol:** _[Veterinario]_  
@@ -1587,6 +1676,8 @@ PATCH /api/v1/medical-records/vaccines
 }
 ```
 ---
+#### HU-V-06: Eliminar una vacuna
+
 **ID:** `HU-V-06`  
 **Título:** _[Eliminar una vacuna]_  
 **Rol:** _[Veterinario]_  
@@ -1631,6 +1722,8 @@ DELETE /api/v1/medical-records/vaccines?vaccineId=123e4567-e89b-12d3-a456-426614
 }
 ```
 ---
+#### HU-V-07: Ver agenda semanal del veterinario
+
 **ID:** `HU-V-07`  
 **Título:** _[Ver agenda semanal del veterinario]_  
 **Rol:** _[Veterinario]_  
@@ -1730,6 +1823,8 @@ GET /api/v1/schedule-config/my-schedule-config
 }
 ```
 ---
+#### HU-V-08: Modificar horarios de agenda del veterinario
+
 **ID:** `HU-V-08`  
 **Título:** _[Modificar horarios de agenda del veterinario]_  
 **Rol:** _[Veterinario]_  
