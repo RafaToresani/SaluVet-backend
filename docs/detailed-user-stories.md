@@ -1146,4 +1146,104 @@ GET /api/v1/appointments/by-date?date=2025-10-22
   "message": "Solicitud exitosa",
   "timestamp": "2025-10-21T18:32:12.539Z"
 }
-````
+```
+---
+**ID:** `HU-R-10`  
+**Título:** _[Ver historial de turnos de una mascota]_  
+**Rol:** _[Recepcionista]_  
+
+### 📝 Descripción  
+Como Recepcionista, quiero poder consultar el historial de turnos de una mascota específica, para responder consultas de los dueños y tener un registro completo de los turnos anteriores y actuales.
+
+### 🔧 Detalles Técnicos  
+- **Método:** `GET`  
+- **Ruta:** `/api/v1/appointments/by-pet/:petId`  
+- **Roles Permitidos:** `[Recepcionista, Superadmin]`  
+- **Autenticación:** Requiere JWT válido  
+- **Parámetro Path:**  
+  - `petId` → ID de la mascota a consultar  
+- **DTO de Respuesta:** `AppointmentResponse[]`  
+
+### ✅ Criterios de Aceptación (según comportamiento actual)
+- **CA-01:** La ruta debe estar protegida y solo accesible mediante autenticación JWT.  
+- **CA-02:** Solo los roles `Recepcionista` y `Superadmin` pueden acceder al endpoint.  
+- **CA-03:** Validar que el `petId` corresponda a una mascota existente → `404 Not Found` si no existe.  
+- **CA-04:** Se deben retornar todas las citas de la mascota, ordenadas por `date` descendente y `startTime` descendente.  
+- **CA-05:** La información de cada turno debe incluir los datos completos: `vet`, `pet`, `owner`, `services`, etc., según lo definido en `AppointmentResponse`.  
+- **CA-06:** Retornar la lista de citas como `AppointmentResponse[]` con código `200 OK`.  
+- **CA-07:** Si la mascota no tiene turnos, devolver un `404 Not Found` con mensaje adecuado.  
+
+### 📦 Parámetro Path de Entrada
+
+| Campo    | Tipo    | Requerido | Descripción |
+|----------|--------|-----------|-------------|
+| `petId`  | `string` | Sí      | ID de la mascota para la cual se desea consultar el historial de turnos |
+
+### 📦 Ejemplo de Request  
+```http
+GET /api/v1/appointments/by-pet/6d92a372-db64-4369-92f7-55d9fa600a12
+```
+
+### 📦 Ejemplo de Respuesta (Exitosa)
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "1ba463db-22a0-4864-9fd5-361d1db54907",
+      "vetId": "57516e06-8655-47df-8caf-46dea940c32f",
+      "vetName": "RAI NAU",
+      "owner": {
+        "id": "5774c773-1348-4b4e-b647-dce2315635fc",
+        "name": "Juan",
+        "lastname": "Perez",
+        "dni": "12345678",
+        "email": "nuevo.email@gmail.com",
+        "phone": "9876543210",
+        "address": "Calle Falsa 123"
+      },
+      "pet": {
+        "id": "6d92a372-db64-4369-92f7-55d9fa600a12",
+        "name": "Firulais",
+        "species": "PERRO",
+        "breed": "Labrador",
+        "birthdate": "2020-01-01T00:00:00.000Z",
+        "gender": "MACHO"
+      },
+      "description": "cita de prueba",
+      "date": "2025-10-22T00:00:00.000Z",
+      "status": "PENDIENTE",
+      "services": [
+        {
+          "id": "03bda783-82d1-4f73-be2a-514cff13d036",
+          "name": "Castración macho",
+          "description": "Procedimiento quirúrgico de esterilización para machos.",
+          "price": 4500,
+          "duration": 60,
+          "isActive": true
+        },
+        {
+          "id": "267de698-3a3e-4035-9272-aeba544518dd",
+          "name": "Cirugía mayor",
+          "description": "Procedimientos quirúrgicos complejos que requieren mayor tiempo y recuperación.",
+          "price": 8000,
+          "duration": 120,
+          "isActive": true
+        }
+      ],
+      "startTime": 800,
+      "endTime": 990,
+      "duration": 190,
+      "extraTime": 10,
+      "extraTimeReason": "cita de prueba",
+      "extraPrice": 10,
+      "extraPriceReason": "cita de prueba",
+      "totalPrice": 12510
+    }
+  ],
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-21T18:32:12.539Z"
+}
+```
+---
+
