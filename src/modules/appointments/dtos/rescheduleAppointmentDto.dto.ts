@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsDate, IsDateString, IsInt, IsNotEmpty, IsOptional, IsString, Max, Min } from "class-validator";
+import { IsDate, IsInt, IsOptional, Max, Min } from "class-validator";
 
 export class RescheduleAppointmentDto {
   @ApiProperty({ example: '2025-08-05', description: 'Nueva fecha' })

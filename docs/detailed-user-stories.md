@@ -531,7 +531,6 @@ Como Recepcionista, quiero registrar un nuevo dueño de mascota ingresando sus d
 }
 ```
 ---
-## 📅 Recepcionista
 **ID:** `HU-R-02`  
 **Título:** _[Actualizar dueño existente]_  
 **Rol:** _[Recepcionista]_  
@@ -592,7 +591,6 @@ Como Recepcionista, quiero actualizar los datos de un dueño de mascota existent
 }
 ```
 ---
-## 📅 Recepcionista
 **ID:** `HU-R-03`  
 **Título:** _[Registrar nueva mascota]_  
 **Rol:** _[Recepcionista]_  
@@ -651,7 +649,6 @@ Como Recepcionista, quiero registrar una nueva mascota asociándola a un dueño 
 }
 ```
 ---
-## 📅 Recepcionista
 **ID:** `HU-R-04`  
 **Título:** _[Actualizar datos de la mascota]_  
 **Rol:** _[Recepcionista]_  
@@ -706,3 +703,447 @@ Como Recepcionista, quiero actualizar los datos de una mascota existente (nombre
   "timestamp": "2025-10-20T19:15:54.601Z"
 }
 ```
+---
+**ID:** `HU-R-13`  
+**Título:** _[Buscar dueños y sus mascotas]_  
+**Rol:** _[Recepcionista]_  
+
+### 📝 Descripción
+
+Como Recepcionista, quiero buscar dueños por nombre, apellido, DNI, teléfono o email, y ver sus mascotas asociadas, para acceder rápidamente a la información necesaria y gestionar turnos o consultas.
+
+### 🔧 Detalles Técnicos
+
+- **Método:** `GET`
+- **Ruta:** `/api/v1/owners/search`
+- **Roles Permitidos:** `[Recepcionista, Superadmin]`
+- **Autenticación:** Requiere JWT válido.
+- **DTO de Entrada:** `MetaQueryDto`
+- **DTO de Respuesta:** `PaginatedResponse<OwnerResponse>` (cada dueño incluye sus mascotas)
+
+---
+
+### 📦 DTO de Entrada (`MetaQueryDto`)
+
+| Campo       | Tipo       | Requerido | Descripción |
+|------------|-----------|-----------|------------|
+| `searchTerm`| `string`  | No        | Término de búsqueda que puede coincidir con nombre, apellido, DNI, email o teléfono del dueño |
+| `page`      | `number`  | No        | Número de página para paginación (por defecto 1) |
+| `size`      | `number`  | No        | Tamaño de la página (por defecto 10) |
+| `sort`      | `SortOrder`| No       | Orden de los resultados (`ASC` o `DESC`, por defecto `ASC`) |
+
+---
+
+### ✅ Criterios de Aceptación
+
+- **CA-01:** La ruta debe estar protegida y solo accesible para usuarios autenticados mediante JWT.
+- **CA-02:** Solo los roles `Recepcionista` y `Superadmin` pueden acceder al endpoint.
+- **CA-03:** Si no se envía `searchTerm`, se deben retornar todos los dueños paginados.
+- **CA-04:** Si se envía `searchTerm`, se deben filtrar los dueños que coincidan parcialmente con el nombre, apellido, email, teléfono o DNI.
+- **CA-05:** La respuesta debe incluir la lista de dueños junto con sus mascotas asociadas.
+- **CA-06:** La respuesta debe soportar paginación con `page`, `size` y ordenamiento con `sort`.
+- **CA-07:** La respuesta debe retornar un objeto con la estructura `PaginatedResponse` incluyendo `data` y `meta` con `page`, `size`, `total` y `sort`.
+
+---
+
+### 📦 Ejemplo de Request Query
+```
+GET /api/v1/owners/search?searchTerm=Juan&page=1&size=5&sort=ASC
+```
+### 📦 Ejemplo de Respuesta Exitosa (`200 OK`)
+
+```json
+{
+  "success": true,
+  "data": {
+    "data": [
+      {
+        "id": "5774c773-1348-4b4e-b647-dce2315635fc",
+        "name": "Juan",
+        "lastname": "Perez",
+        "dni": "12345678",
+        "email": "nuevo.email@gmail.com",
+        "phone": "9876543210",
+        "address": "Calle Falsa 123",
+        "pets": [
+          {
+            "id": "6d92a372-db64-4369-92f7-55d9fa600a12",
+            "name": "Firulais",
+            "species": "PERRO",
+            "breed": "Labrador",
+            "birthdate": "2020-01-01T00:00:00.000Z",
+            "gender": "MACHO"
+          }
+        ]
+      }
+    ],
+    "meta": {
+      "page": 1,
+      "size": 10,
+      "total": 1,
+      "sort": "asc"
+    }
+  },
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-20T19:24:07.039Z"
+}
+```
+---
+**ID:** `HU-R-06`  
+**Título:** _[Crear turno para mascota]_  
+**Rol:** _[Recepcionista]_  
+
+### 📝 Descripción
+Como Recepcionista, quiero crear un turno para una mascota con un veterinario específico, asignando uno o varios servicios y opcionalmente agregando tiempo o precio extra, para organizar la agenda médica, respetando la disponibilidad del veterinario y evitando solapamientos.
+
+### 🔧 Detalles Técnicos
+- **Método:** `POST`  
+- **Ruta:** `/api/v1/appointments`  
+- **Roles Permitidos:** `[Recepcionista, Superadmin]`  
+- **Autenticación:** Requiere JWT válido  
+- **DTO de Entrada:** `AppointmentForCreationDto`  
+- **DTO de Respuesta:** `AppointmentResponse`  
+
+### ✅ Criterios de Aceptación
+- **CA-01:** La ruta debe estar protegida y solo accesible para usuarios autenticados mediante JWT.  
+- **CA-02:** Solo los roles `Recepcionista` y `Superadmin` pueden acceder al endpoint.  
+- **CA-03:** Campos obligatorios: `petId`, `vetId`, `services`, `date`, `startTime`.  
+- **CA-04:** Validar que la mascota (`petId`) exista → `404 Not Found` si no existe.  
+- **CA-05:** Validar que el veterinario (`vetId`) exista y tenga rol `VETERINARIO` → `404 Not Found` o `400 Bad Request` según corresponda.  
+- **CA-06:** Validar que los servicios existan, estén activos y que el veterinario pueda realizarlos → `404 Not Found` o `400 Bad Request`.  
+- **CA-07:** No se permiten servicios duplicados → `400 Bad Request`.  
+- **CA-08:** Validar disponibilidad del veterinario según su configuración de agenda → `400 Bad Request` si está fuera de horario o inactivo.  
+- **CA-09:** Validar que la fecha no sea pasada → `400 Bad Request`.  
+- **CA-10:** Validar que no haya solapamientos con otros turnos del veterinario → `400 Bad Request`.  
+- **CA-11:** En caso de éxito, la cita se crea y se devuelve un `AppointmentResponse` con código `201 Created`.  
+
+### 📦 DTO de Entrada (`AppointmentForCreationDto`)
+
+| Campo             | Tipo                               | Requerido | Descripción |
+|------------------|-----------------------------------|-----------|------------|
+| `petId`           | `string`                          | Sí        | ID de la mascota |
+| `vetId`           | `string`                          | Sí        | ID del veterinario asignado |
+| `description`     | `string`                          | No        | Descripción opcional de la cita |
+| `services`        | `AppointmentServicesForCreationDto[]` | Sí     | Lista de servicios asociados a la cita |
+| `extraTime`       | `number`                          | No        | Tiempo adicional opcional en minutos |
+| `extraTimeReason` | `string`                          | No        | Motivo del tiempo extra |
+| `extraPrice`      | `number`                          | No        | Precio extra opcional |
+| `extraPriceReason`| `string`                          | No        | Motivo del precio extra |
+| `date`            | `Date`                            | Sí        | Fecha de la cita |
+| `startTime`       | `number`                          | Sí        | Hora de inicio en minutos desde medianoche |
+
+### 📦 DTO de Servicio (`AppointmentServicesForCreationDto`)
+
+| Campo               | Tipo    | Requerido | Descripción |
+|--------------------|---------|-----------|------------|
+| `clinicalServiceId` | `string`| Sí        | ID del servicio clínico |
+
+
+### 📦 Ejemplo de Request Body
+
+```json
+{
+  "petId": "6d92a372-db64-4369-92f7-55d9fa600a12",
+  "vetId": "a7b23c11-89d1-4f5a-92b1-11d22a4e6f11",
+  "description": "Revisión anual",
+  "services": [
+    { "clinicalServiceId": "123e4567-e89b-12d3-a456-426614174000" }
+  ],
+  "extraTime": 10,
+  "extraTimeReason": "Chequeo adicional",
+  "extraPrice": 15,
+  "extraPriceReason": "Vacuna extra",
+  "date": "2025-10-25",
+  "startTime": 600
+}
+```
+
+### 📦 Ejemplo de Respuesta exitosa
+```json
+{
+  "success": true,
+  "data": {
+    "id": "a1013f43-1b69-495c-9606-462b6bc4507d",
+    "vetId": "57516e06-8655-47df-8caf-46dea940c32f",
+    "vetName": "RAI NAU",
+    "owner": {
+      "id": "5774c773-1348-4b4e-b647-dce2315635fc",
+      "name": "Juan",
+      "lastname": "Perez",
+      "dni": "12345678",
+      "email": "nuevo.email@gmail.com",
+      "phone": "9876543210",
+      "address": "Calle Falsa 123"
+    },
+    "pet": {
+      "id": "6d92a372-db64-4369-92f7-55d9fa600a12",
+      "name": "Firulais",
+      "species": "PERRO",
+      "breed": "Labrador",
+      "birthdate": "2020-01-01T00:00:00.000Z",
+      "gender": "MACHO"
+    },
+    "description": "cita de prueba",
+    "date": "2026-01-01T00:00:00.000Z",
+    "status": "PENDIENTE",
+    "services": [
+      {
+        "id": "267de698-3a3e-4035-9272-aeba544518dd",
+        "name": "Cirugía mayor",
+        "description": "Procedimientos quirúrgicos complejos que requieren mayor tiempo y recuperación.",
+        "price": 8000,
+        "duration": 120,
+        "isActive": true
+      }
+    ],
+    "startTime": 600,
+    "endTime": 730,
+    "duration": 130,
+    "extraTime": 10,
+    "extraTimeReason": "cita de prueba",
+    "extraPrice": 10,
+    "extraPriceReason": "cita de prueba",
+    "totalPrice": 8010
+  },
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-20T19:51:11.738Z"
+}
+```
+---
+**ID:** `HU-R-07`  
+**Título:** _[Reprogramar un turno]_  
+**Rol:** _[Recepcionista]_  
+
+### 📝 Descripción
+Como Recepcionista, quiero reprogramar un turno existente cambiando la fecha y/o la hora de inicio, para gestionar cambios en la agenda médica, respetando la disponibilidad del veterinario y evitando solapamientos con otros turnos. También se incluye la posibilidad de cancelar turnos mediante un endpoint similar.
+
+### 🔧 Detalles Técnicos
+- **Método:** `PATCH`  
+- **Ruta:** `/api/v1/appointments/:id`  
+- **Roles Permitidos:** `[Recepcionista, Superadmin]`  
+- **Autenticación:** Requiere JWT válido  
+- **DTO de Entrada:** `RescheduleAppointmentDto`  
+- **DTO de Respuesta:** `AppointmentResponse`  
+
+### ✅ Criterios de Aceptación
+- **CA-01:** La ruta debe estar protegida y solo accesible para usuarios autenticados mediante JWT.  
+- **CA-02:** Solo los roles `Recepcionista` y `Superadmin` pueden acceder al endpoint.  
+- **CA-03:** Se debe enviar al menos `newDate` o `newStartTime` → `400 Bad Request` si no se envía ninguno.  
+- **CA-04:** Validar que el turno exista → `404 Not Found` si no se encuentra.  
+- **CA-05:** No se puede reprogramar un turno cancelado → `400 Bad Request`.  
+- **CA-06:** Validar que la nueva fecha no sea pasada → `400 Bad Request`.  
+- **CA-07:** Validar disponibilidad del veterinario según su configuración de agenda → `400 Bad Request` si está fuera de horario o inactivo.  
+- **CA-08:** Validar que no haya solapamientos con otros turnos del veterinario → `400 Bad Request`.  
+- **CA-09:** En caso de éxito, se devuelve un `AppointmentResponse` con el turno actualizado y código `200 OK`.  
+
+### 📦 DTO de Entrada (`RescheduleAppointmentDto`)
+
+| Campo          | Tipo    | Requerido | Descripción |
+|----------------|---------|-----------|------------|
+| `newDate`       | `Date`  | No        | Nueva fecha del turno |
+| `newStartTime`  | `number`| No        | Nueva hora de inicio en minutos desde medianoche |
+
+### 📦 Ejemplo de Request Body
+
+```json
+{
+  "newDate": "2025-11-01",
+  "newStartTime": 660
+}
+```
+---
+**ID:** `HU-R-08`  
+**Título:** _[Actualizar estado de un turno]_  
+**Rol:** _[Recepcionista / Veterinario / Superadmin]_
+
+## 📝 Descripción
+Como usuario autorizado (Recepcionista, Veterinario o Superadmin), quiero actualizar el estado de un turno, para poder marcarlo como **cancelado**, **pendiente**, o cualquier otro estado definido, y así mantener la agenda actualizada y reflejar cambios en tiempo real.
+
+## 🔧 Detalles Técnicos
+- **Método:** `PATCH`  
+- **Ruta:** `/api/v1/appointments/update-status/:id`  
+- **Roles Permitidos:** `[Recepcionista, Veterinario, Superadmin]`  
+- **Autenticación:** Requiere JWT válido  
+- **Parámetros:**  
+  - `id` → ID del turno a modificar  
+  - `status` → nuevo estado (`EAppointmentStatus`) pasado como query  
+- **DTO de Respuesta:** `AppointmentResponse`  
+
+## ✅ Criterios de Aceptación
+- **CA-01:** La ruta debe estar protegida y solo accesible para usuarios autenticados mediante JWT.  
+- **CA-02:** Solo los roles `[Recepcionista, Veterinario, Superadmin]` pueden acceder al endpoint.  
+- **CA-03:** Validar que el ID del turno exista → `404 Not Found` si no existe.  
+- **CA-04:** Validar que el `status` enviado sea válido → `400 Bad Request` si no pertenece a `EAppointmentStatus`.  
+- **CA-05:** Actualizar el estado del turno en la base de datos.  
+- **CA-06:** Retornar el turno actualizado como `AppointmentResponse`.  
+- **CA-07:** Permitir cambiar un turno cancelado a otro estado si es necesario.  
+
+## 📦 Parámetros de Entrada
+
+| Campo   | Tipo                  | Requerido | Descripción |
+|---------|---------------------|-----------|------------|
+| `id`    | `string`            | Sí        | ID del turno a actualizar |
+| `status`| `EAppointmentStatus`| Sí        | Nuevo estado del turno (`PENDIENTE`, `CANCELADO`, `FINALIZADO`, etc.) |
+
+## 📦 Ejemplo de Request
+```
+PATCH /api/v1/appointments/update-status/a1013f43-1b69-495c-9606-462b6bc4507d?status=CANCELADO
+```
+### 📦 Ejemplo de Request Body
+```json
+{
+  "success": true,
+  "data": {
+    "id": "5570973c-0a88-4a0f-9949-84a9dd2c73b7",
+    "vetId": "57516e06-8655-47df-8caf-46dea940c32f",
+    "vetName": "RAI NAU",
+    "owner": {
+      "id": "5774c773-1348-4b4e-b647-dce2315635fc",
+      "name": "Juan",
+      "lastname": "Perez",
+      "dni": "12345678",
+      "email": "nuevo.email@gmail.com",
+      "phone": "9876543210",
+      "address": "Calle Falsa 123"
+    },
+    "pet": {
+      "id": "6d92a372-db64-4369-92f7-55d9fa600a12",
+      "name": "Firulais",
+      "species": "PERRO",
+      "breed": "Labrador",
+      "birthdate": "2020-01-01T00:00:00.000Z",
+      "gender": "MACHO"
+    },
+    "description": "cita de prueba",
+    "date": "2025-12-17T00:00:00.000Z",
+    "status": "CANCELADO",
+    "services": [
+      {
+        "id": "03bda783-82d1-4f73-be2a-514cff13d036",
+        "name": "Castración macho",
+        "description": "Procedimiento quirúrgico de esterilización para machos.",
+        "price": 4500,
+        "duration": 60,
+        "isActive": true
+      },
+      {
+        "id": "267de698-3a3e-4035-9272-aeba544518dd",
+        "name": "Cirugía mayor",
+        "description": "Procedimientos quirúrgicos complejos que requieren mayor tiempo y recuperación.",
+        "price": 8000,
+        "duration": 120,
+        "isActive": true
+      }
+    ],
+    "startTime": 600,
+    "endTime": 790,
+    "duration": 190,
+    "extraTime": 10,
+    "extraTimeReason": "cita de prueba",
+    "extraPrice": 10,
+    "extraPriceReason": "cita de prueba",
+    "totalPrice": 12510
+  },
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-20T20:19:18.310Z"
+}
+```
+---
+**ID:** `HU-R-09`  
+**Título:** _[Listar turnos del día por fecha]_  
+**Rol:** _[Recepcionista]_  
+
+### 📝 Descripción  
+Como Recepcionista, quiero ver la lista de turnos correspondientes a una fecha específica (por ejemplo, el día actual), para poder organizar mi trabajo de manera eficiente y visualizar los turnos agendados.
+
+### 🔧 Detalles Técnicos  
+- **Método:** `GET`  
+- **Ruta:** `/api/v1/appointments/by-date?date={YYYY-MM-DD}`  
+- **Roles Permitidos:** `[Recepcionista, Superadmin]`  
+- **Autenticación:** Requiere JWT válido  
+- **Parámetro Query:**  
+  - `date` → Fecha a consultar (tipo `Date`)  
+- **DTO de Respuesta:** `AppointmentResponse[]`  
+
+### ✅ Criterios de Aceptación (según comportamiento actual)
+- **CA-01:** La ruta debe estar protegida y solo accesible mediante autenticación JWT.  
+- **CA-02:** Solo los roles `Recepcionista` y `Superadmin` pueden acceder al endpoint.  
+- **CA-03:** El parámetro `date` debe enviarse en el query; en caso de no estar presente, se devuelve un error desde la capa de validación o el endpoint.  
+- **CA-04:** Se deben retornar todas las citas (appointments) cuya fecha coincida con la solicitada.  
+- **CA-05:** La información de cada cita debe incluir los datos relacionados (`vet`, `pet`, `owner`, `services`, etc.) según lo definido en `AppointmentResponse`.  
+- **CA-06:** Los resultados se devuelven en una lista (`AppointmentResponse[]`) con código `200 OK`.  
+- **CA-07:** Si no se encuentran citas para la fecha indicada, se devuelve una lista vacía (`[]`) dentro del campo `data`.  
+
+### 📦 Parámetro Query de Entrada
+
+| Campo   | Tipo   | Requerido | Descripción |
+|---------|--------|-----------|-------------|
+| `date`  | `Date` | Sí        | Fecha a consultar en formato `YYYY-MM-DD` o ISO |
+
+### 📦 Ejemplo de Request  
+```
+GET /api/v1/appointments/by-date?date=2025-10-22
+```
+
+### 📦 Ejemplo de Respuesta (Exitosa)
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "1ba463db-22a0-4864-9fd5-361d1db54907",
+      "vetId": "57516e06-8655-47df-8caf-46dea940c32f",
+      "vetName": "RAI NAU",
+      "owner": {
+        "id": "5774c773-1348-4b4e-b647-dce2315635fc",
+        "name": "Juan",
+        "lastname": "Perez",
+        "dni": "12345678",
+        "email": "nuevo.email@gmail.com",
+        "phone": "9876543210",
+        "address": "Calle Falsa 123"
+      },
+      "pet": {
+        "id": "6d92a372-db64-4369-92f7-55d9fa600a12",
+        "name": "Firulais",
+        "species": "PERRO",
+        "breed": "Labrador",
+        "birthdate": "2020-01-01T00:00:00.000Z",
+        "gender": "MACHO"
+      },
+      "description": "cita de prueba",
+      "date": "2025-10-22T00:00:00.000Z",
+      "status": "PENDIENTE",
+      "services": [
+        {
+          "id": "03bda783-82d1-4f73-be2a-514cff13d036",
+          "name": "Castración macho",
+          "description": "Procedimiento quirúrgico de esterilización para machos.",
+          "price": 4500,
+          "duration": 60,
+          "isActive": true
+        },
+        {
+          "id": "267de698-3a3e-4035-9272-aeba544518dd",
+          "name": "Cirugía mayor",
+          "description": "Procedimientos quirúrgicos complejos que requieren mayor tiempo y recuperación.",
+          "price": 8000,
+          "duration": 120,
+          "isActive": true
+        }
+      ],
+      "startTime": 800,
+      "endTime": 990,
+      "duration": 190,
+      "extraTime": 10,
+      "extraTimeReason": "cita de prueba",
+      "extraPrice": 10,
+      "extraPriceReason": "cita de prueba",
+      "totalPrice": 12510
+    }
+  ],
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-21T18:32:12.539Z"
+}
+```
+---

@@ -22,6 +22,11 @@
 * **HU-R-02:** Como Recepcionista, quiero editar la información de los dueños, para corregir o actualizar datos.
 * **HU-R-03:** Como Recepcionista, quiero registrar nuevas mascotas asociadas a un dueño, para tener el control de los pacientes.
 * **HU-R-04:** Como Recepcionista, quiero editar los datos de las mascotas, para corregir información cuando sea necesario.
+* **HU-R-05:** Como Recepcionista, quiero buscar dueños por nombre, apellido, DNI, teléfono o email, y ver sus mascotas asociadas, para acceder rápidamente a la información necesaria.
+* **HU-R-06:** Como Recepcionista, quiero crear turnos para mascotas con veterinarios específicos, para organizar la agenda médica.
+* **HU-R-07:** Como Recepcionista, quiero reprogramar un turno existente cambiando la fecha y/o la hora de inicio, para gestionar cambios en la agenda médica, respetando la disponibilidad del veterinario y evitando solapamientos con otros turnos.
+* **HU-R-08:** Como usuario autorizado (Recepcionista, Veterinario o Superadmin), quiero actualizar el estado de un turno, para poder marcarlo como **cancelado**, **pendiente**, o cualquier otro estado definido, y así mantener la agenda actualizada y reflejar cambios en tiempo real.
+* **HU-R-09:** Como Recepcionista, quiero ver la lista de turnos del día, ordenados por horario, para organizar mi trabajo.
 
 <!-- ### 👑 Superadmin
 
