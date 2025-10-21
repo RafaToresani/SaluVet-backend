@@ -1247,3 +1247,561 @@ GET /api/v1/appointments/by-pet/6d92a372-db64-4369-92f7-55d9fa600a12
 ```
 ---
 
+## 👨‍⚕️ Veterinario
+
+**ID:** `HU-V-01`  
+**Título:** _[Listar turnos del día del veterinario]_  
+**Rol:** _[Veterinario]_  
+
+### 📝 Descripción  
+Como Veterinario, quiero ver la lista de mis turnos asignados para una fecha específica (por ejemplo, el día actual), para organizar mi jornada laboral y visualizar los turnos que debo atender.
+
+### 🔧 Detalles Técnicos  
+- **Método:** `GET`  
+- **Ruta:** `/api/v1/appointments/by-vet/my?date={YYYY-MM-DD}`  
+- **Roles Permitidos:** `[Veterinario]`  
+- **Autenticación:** Requiere JWT válido  
+- **Parámetro Query:**  
+  - `date` → Fecha a consultar (tipo `Date`)  
+- **DTO de Respuesta:** `AppointmentResponse[]`  
+
+### ✅ Criterios de Aceptación (según comportamiento actual)  
+- **CA-01:** La ruta debe estar protegida y solo accesible mediante autenticación JWT.  
+- **CA-02:** Solo el rol `Veterinario` puede acceder al endpoint.  
+- **CA-03:** El parámetro `date` debe enviarse en el query; si no se envía o es inválido, se devuelve `400 Bad Request`.  
+- **CA-04:** Validar que el ID del veterinario exista y corresponda a un usuario con rol `Veterinario`; si no, se devuelve `404 Not Found` o `400 Bad Request`.  
+- **CA-05:** Se deben retornar todas las citas (appointments) del veterinario cuya fecha coincida con la solicitada.  
+- **CA-06:** La información de cada cita debe incluir los datos relacionados (`vet`, `pet`, `owner`, `services`, etc.) según lo definido en `AppointmentResponse`.  
+- **CA-07:** Los resultados se devuelven ordenados por `startTime` ascendente con código `200 OK`.  
+- **CA-08:** Si no se encuentran citas para la fecha indicada, se devuelve un `404 Not Found` con un mensaje adecuado.  
+
+### 📦 Parámetro Query de Entrada
+
+| Campo   | Tipo   | Requerido | Descripción |
+|---------|--------|-----------|-------------|
+| `date`  | `Date` | Sí        | Fecha a consultar en formato `YYYY-MM-DD` o ISO |  
+
+### 📦 Ejemplo de Request  
+```http
+GET /api/v1/appointments/by-vet/my?date=2025-10-22
+```
+
+### 📦 Ejemplo de Respuesta (Exitosa)
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "1ba463db-22a0-4864-9fd5-361d1db54907",
+      "vetId": "57516e06-8655-47df-8caf-46dea940c32f",
+      "vetName": "RAI NAU",
+      "owner": {
+        "id": "5774c773-1348-4b4e-b647-dce2315635fc",
+        "name": "Juan",
+        "lastname": "Perez",
+        "dni": "12345678",
+        "email": "nuevo.email@gmail.com",
+        "phone": "9876543210",
+        "address": "Calle Falsa 123"
+      },
+      "pet": {
+        "id": "6d92a372-db64-4369-92f7-55d9fa600a12",
+        "name": "Firulais",
+        "species": "PERRO",
+        "breed": "Labrador",
+        "birthdate": "2020-01-01T00:00:00.000Z",
+        "gender": "MACHO"
+      },
+      "description": "cita de prueba",
+      "date": "2025-10-22T00:00:00.000Z",
+      "status": "PENDIENTE",
+      "services": [
+        {
+          "id": "03bda783-82d1-4f73-be2a-514cff13d036",
+          "name": "Castración macho",
+          "description": "Procedimiento quirúrgico de esterilización para machos.",
+          "price": 4500,
+          "duration": 60,
+          "isActive": true
+        },
+        {
+          "id": "267de698-3a3e-4035-9272-aeba544518dd",
+          "name": "Cirugía mayor",
+          "description": "Procedimientos quirúrgicos complejos que requieren mayor tiempo y recuperación.",
+          "price": 8000,
+          "duration": 120,
+          "isActive": true
+        }
+      ],
+      "startTime": 800,
+      "endTime": 990,
+      "duration": 190,
+      "extraTime": 10,
+      "extraTimeReason": "cita de prueba",
+      "extraPrice": 10,
+      "extraPriceReason": "cita de prueba",
+      "totalPrice": 12510
+    }
+  ],
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-21T19:16:37.887Z"
+}
+```
+---
+**ID:** `HU-V-02`  
+**Título:** _[Registrar historial médico de una mascota]_  
+**Rol:** _[Veterinario]_  
+
+### 📝 Descripción  
+Como Veterinario, quiero registrar consultas médicas (diagnóstico, tratamiento, notas y vacunas) para las mascotas que atendí, con el fin de mantener actualizado el historial clínico y disponer de información completa sobre el seguimiento de cada paciente.
+
+### 🔧 Detalles Técnicos  
+- **Método:** `POST`  
+- **Ruta:** `/api/v1/medical-records`  
+- **Roles Permitidos:** `[Veterinario]`  
+- **Autenticación:** Requiere JWT válido  
+- **DTO de Entrada:** `MedicalRecordForCreationDto`  
+- **DTO de Respuesta:** `MedicalRecord` (incluye vacunas registradas)  
+
+### ✅ Criterios de Aceptación (según comportamiento actual)  
+- **CA-01:** La ruta debe estar protegida y solo accesible mediante autenticación JWT.  
+- **CA-02:** Solo el rol `Veterinario` puede acceder al endpoint.  
+- **CA-03:** Validar que el ID de la cita (`appointmentId`) exista → `404 Not Found` si no se encuentra.  
+- **CA-04:** Validar que la mascota asociada a la cita exista → `404 Not Found` si no se encuentra.  
+- **CA-05:** Validar que el veterinario que realiza la operación exista → `404 Not Found` si no se encuentra.  
+- **CA-06:** Validar que el veterinario esté autorizado para registrar el historial (es decir, que coincida con el `vetId` de la cita) → `401 Unauthorized` si no coincide.  
+- **CA-07:** No se puede crear un historial médico duplicado para la misma cita → `400 Bad Request`.  
+- **CA-08:** Se deben registrar opcionalmente los campos `diagnosis`, `treatment`, `notes` y `vaccines`.  
+- **CA-09:** En caso de éxito, se devuelve el historial médico creado con sus vacunas asociadas dentro de la transacción de base de datos y código `201 Created`.  
+
+### 📦 DTO de Entrada (`MedicalRecordForCreationDto`)
+
+| Campo       | Tipo                  | Requerido | Descripción |
+|------------|---------------------|-----------|------------|
+| `appointmentId` | `string`          | Sí        | ID de la cita asociada |
+| `diagnosis`     | `string`          | No        | Diagnóstico de la consulta |
+| `treatment`     | `string`          | No        | Tratamiento administrado |
+| `notes`         | `string`          | No        | Notas adicionales del veterinario |
+| `vaccines`      | `VaccineForCreationDto[]` | No | Lista de vacunas aplicadas durante la cita |
+
+### 📦 DTO Interno (`VaccineForCreationDto`)
+
+| Campo       | Tipo    | Requerido | Descripción |
+|------------|---------|-----------|------------|
+| `name`     | `string` | Sí        | Nombre de la vacuna |
+| `description` | `string` | No     | Descripción de la vacuna |
+
+### 📦 Ejemplo de Request Body
+```json
+{
+  "appointmentId": "123e4567-e89b-12d3-a456-426614174000",
+  "diagnosis": "El paciente tiene fiebre",
+  "treatment": "Se le administró antibiótico",
+  "notes": "Revisar temperatura en 3 días",
+  "vaccines": [
+    { "name": "Vacuna antirrábica", "description": "Aplicada según protocolo" }
+  ]
+}
+```
+### 📦 Ejemplo de Respuesta (Exitosa)
+```json
+{
+  "success": true,
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-21T19:25:25.237Z"
+}
+```
+---
+**ID:** `HU-V-03`  
+**Título:** _[Editar historial médico de una mascota]_  
+**Rol:** _[Veterinario]_  
+
+### 📝 Descripción  
+Como Veterinario, quiero editar o actualizar consultas médicas ya registradas, para corregir errores o agregar información adicional, asegurando que el historial clínico se mantenga completo y actualizado.
+
+### 🔧 Detalles Técnicos  
+- **Método:** `PATCH`  
+- **Ruta:** `/api/v1/medical-records`  
+- **Roles Permitidos:** `[Veterinario]`  
+- **Autenticación:** Requiere JWT válido  
+- **DTO de Entrada:** `MedicalRecordForUpdateDto`  
+- **DTO de Respuesta:** `void` (operación de actualización)  
+
+### ✅ Criterios de Aceptación (según comportamiento actual)  
+- **CA-01:** La ruta debe estar protegida y solo accesible mediante autenticación JWT.  
+- **CA-02:** Solo el rol `Veterinario` puede acceder al endpoint.  
+- **CA-03:** Validar que el ID del historial médico (`id`) exista → `404 Not Found` si no se encuentra.  
+- **CA-04:** Validar que el veterinario que realiza la actualización sea el mismo que registró el historial → `401 Unauthorized` si no coincide.  
+- **CA-05:** Los campos `diagnosis`, `treatment` y `notes` son opcionales, pero al menos se debe actualizar alguno.  
+- **CA-06:** Si un campo no se envía, se mantiene el valor existente en la base de datos.  
+- **CA-07:** Se realiza la actualización de los campos proporcionados en la base de datos mediante el método `update`.  
+- **CA-08:** En caso de éxito, se devuelve un código `200 OK` (sin contenido adicional).  
+
+### 📦 DTO de Entrada (`MedicalRecordForUpdateDto`)
+
+| Campo       | Tipo    | Requerido | Descripción |
+|------------|---------|-----------|------------|
+| `id`       | `string` | Sí       | ID del historial médico a actualizar |
+| `diagnosis`| `string` | No       | Nuevo diagnóstico de la consulta |
+| `treatment`| `string` | No       | Nuevo tratamiento administrado |
+| `notes`    | `string` | No       | Nuevas notas adicionales del veterinario |
+
+### 📦 Ejemplo de Request Body
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "diagnosis": "El paciente muestra mejoría",
+  "treatment": "Se ajustó la dosis del medicamento",
+  "notes": "Revisar evolución en 5 días"
+}
+```
+### 📦 Ejemplo de Respuesta (Exitosa)
+```json
+{
+  "success": true,
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-21T19:35:25.343Z"
+}
+```
+---
+**ID:** `HU-V-04`  
+**Título:** _[Registrar vacuna aplicada a una mascota]_  
+**Rol:** _[Veterinario]_  
+
+### 📝 Descripción  
+Como Veterinario, quiero registrar vacunas aplicadas a una mascota, para llevar un control actualizado del historial de vacunación de cada paciente.
+
+### 🔧 Detalles Técnicos  
+- **Método:** `POST`  
+- **Ruta:** `/api/v1/medical-records/vaccines?medicalRecordId={id}`  
+- **Roles Permitidos:** `[Veterinario]`  
+- **Autenticación:** Requiere JWT válido  
+- **Parámetro Query:**  
+  - `medicalRecordId` → ID del historial médico al cual se asociará la vacuna  
+- **DTO de Entrada:** `VaccineForCreationDto`  
+- **DTO de Respuesta:** `Vaccine`  
+
+### ✅ Criterios de Aceptación (según comportamiento actual)  
+- **CA-01:** La ruta debe estar protegida y solo accesible mediante autenticación JWT.  
+- **CA-02:** Solo el rol `Veterinario` puede acceder al endpoint.  
+- **CA-03:** Validar que el historial médico exista (`medicalRecordId`) → `404 Not Found` si no existe.  
+- **CA-04:** Validar que el veterinario que realiza la operación sea el mismo que registró el historial médico → `401 Unauthorized` si no coincide.  
+- **CA-05:** Validar que el campo `name` de la vacuna esté presente y no sea vacío.  
+- **CA-06:** La vacuna se registra con la fecha actual (`date`) y se asocia al historial médico indicado.  
+- **CA-07:** En caso de éxito, se devuelve el objeto `Vaccine` recién creado con su ID, nombre, descripción y fecha de registro.  
+
+### 📦 Parámetro Query de Entrada
+
+| Campo              | Tipo    | Requerido | Descripción |
+|-------------------|---------|-----------|------------|
+| `medicalRecordId` | `string` | Sí       | ID del historial médico asociado |
+
+### 📦 DTO de Entrada (`VaccineForCreationDto`)
+
+| Campo        | Tipo    | Requerido | Descripción |
+|-------------|---------|-----------|------------|
+| `name`      | `string` | Sí       | Nombre de la vacuna |
+| `description`| `string` | No       | Descripción de la vacuna |
+
+### 📦 Ejemplo de Request
+```http
+POST /api/v1/medical-records/vaccines?medicalRecordId=123e4567-e89b-12d3-a456-426614174000
+```
+
+### 📦 Ejemplo de Request Body
+```json
+{
+  "name": "Vacuna antirrábica",
+  "description": "Vacuna aplicada para prevenir rabia"
+}
+```
+### 📦 Ejemplo de Respuesta (Exitosa)
+```json
+{
+  "success": true,
+  "data": {
+    "id": "b16abb4b-7804-4b86-88ab-15d32e10c754",
+    "medicalRecordsId": "53ab4fd3-2a32-47fe-8ab3-936e4b34d12c",
+    "name": "Vacuna contra la gripe",
+    "description": "Vacuna contra la gripe",
+    "date": "2025-10-21T19:40:10.601Z",
+    "createdAt": "2025-10-21T19:40:10.603Z",
+    "updatedAt": "2025-10-21T19:40:10.603Z"
+  },
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-21T19:40:10.605Z"
+}
+```
+---
+**ID:** `HU-V-05`  
+**Título:** _[Actualizar vacuna registrada]_  
+**Rol:** _[Veterinario]_  
+
+### 📝 Descripción  
+Como Veterinario, quiero actualizar los datos de una vacuna previamente registrada (nombre o descripción), para corregir errores o complementar la información en el historial de vacunación de la mascota.
+
+### 🔧 Detalles Técnicos  
+- **Método:** `PATCH`  
+- **Ruta:** `/api/v1/medical-records/vaccines`  
+- **Roles Permitidos:** `[Veterinario]`  
+- **Autenticación:** Requiere JWT válido  
+- **DTO de Entrada:** `VaccineForUpdateDto` (extiende `VaccineForCreationDto`)  
+- **DTO de Respuesta:** `Vaccine`  
+
+### ✅ Criterios de Aceptación (según comportamiento actual)  
+- **CA-01:** La ruta debe estar protegida y solo accesible mediante autenticación JWT.  
+- **CA-02:** Solo el rol `Veterinario` puede acceder al endpoint.  
+- **CA-03:** Validar que la vacuna exista (`id`) → `404 Not Found` si no existe.  
+- **CA-04:** Validar que el veterinario que realiza la actualización sea el mismo que registró la vacuna → `401 Unauthorized` si no coincide.  
+- **CA-05:** El campo `id` es obligatorio.  
+- **CA-06:** Los campos `name` y `description` son opcionales, pero si se envían, se actualizan; de lo contrario, se mantienen los valores existentes.  
+- **CA-07:** La vacuna actualizada se guarda en la base de datos y se devuelve el objeto `Vaccine` actualizado.  
+
+### 📦 DTO de Entrada (`VaccineForUpdateDto`)
+
+| Campo        | Tipo    | Requerido | Descripción |
+|-------------|---------|-----------|------------|
+| `id`        | `string` | Sí       | ID de la vacuna a actualizar |
+| `name`      | `string` | No       | Nuevo nombre de la vacuna |
+| `description`| `string` | No       | Nueva descripción de la vacuna |
+
+### 📦 Ejemplo de Request
+```http
+PATCH /api/v1/medical-records/vaccines
+```
+
+### 📦 Ejemplo de Request Body
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "name": "Vacuna antirrábica actualizada",
+  "description": "Descripción corregida de la vacuna"
+}
+```
+### 📦 Ejemplo de Respuesta (Exitosa)
+```json
+{
+  "success": true,
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-21T19:43:02.748Z"
+}
+```
+---
+**ID:** `HU-V-06`  
+**Título:** _[Eliminar una vacuna]_  
+**Rol:** _[Veterinario]_  
+
+### 📝 Descripción  
+Como Veterinario, quiero poder eliminar vacunas registradas de un historial médico, para corregir errores o registros duplicados y mantener actualizado el historial clínico de la mascota.
+
+### 🔧 Detalles Técnicos  
+- **Método:** `DELETE`  
+- **Ruta:** `/api/v1/medical-records/vaccines?vaccineId={vaccineId}`  
+- **Roles Permitidos:** `[Veterinario]`  
+- **Autenticación:** Requiere JWT válido  
+- **Parámetro Query:**  
+  - `vaccineId` → ID de la vacuna a eliminar  
+- **DTO de Respuesta:** `{ success: boolean, message: string }`  
+
+### ✅ Criterios de Aceptación
+- **CA-01:** La ruta debe estar protegida y solo accesible mediante autenticación JWT.  
+- **CA-02:** Solo el veterinario que registró la vacuna puede eliminarla.  
+- **CA-03:** Validar que la vacuna exista → `404 Not Found` si no se encuentra.  
+- **CA-04:** Eliminar la vacuna de la base de datos usando `prisma.vaccines.delete()`.  
+- **CA-05:** Retornar un mensaje de confirmación (`success: true`) si la operación fue exitosa.  
+- **CA-06:** No se debe permitir eliminar vacunas de historiales médicos de otros veterinarios → `401 Unauthorized`.  
+
+### 📦 Parámetro Query de Entrada
+
+| Campo      | Tipo   | Requerido | Descripción |
+|------------|--------|-----------|-------------|
+| `vaccineId`| `string` | Sí      | ID de la vacuna a eliminar |
+
+### 📦 Ejemplo de Request  
+```http
+DELETE /api/v1/medical-records/vaccines?vaccineId=123e4567-e89b-12d3-a456-426614174000
+```
+
+### 📦 Ejemplo de Respuesta (Exitosa)
+```json
+{
+  "success": true,
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-21T19:47:08.676Z"
+}
+```
+---
+**ID:** `HU-V-07`  
+**Título:** _[Ver agenda semanal del veterinario]_  
+**Rol:** _[Veterinario]_  
+
+### 📝 Descripción  
+Como Veterinario, quiero poder ver mi agenda semanal (días y horarios), para conocer mi disponibilidad y organizar mi jornada de manera eficiente.
+
+### 🔧 Detalles Técnicos  
+- **Método:** `GET`  
+- **Ruta:** `/api/v1/schedule-config/my-schedule-config`  
+- **Roles Permitidos:** `[Veterinario]`  
+- **Autenticación:** Requiere JWT válido  
+- **DTO de Respuesta:** `ScheduleConfigResponse`  
+- **Datos Incluidos:** Días de la semana con horarios de inicio y fin, estado activo/inactivo de cada día.  
+
+### ✅ Criterios de Aceptación
+- **CA-01:** La ruta debe estar protegida y solo accesible mediante autenticación JWT.  
+- **CA-02:** Solo los usuarios con rol `Veterinario` pueden acceder al endpoint.  
+- **CA-03:** Validar que el usuario exista → `404 Not Found` si no existe.  
+- **CA-04:** Validar que el usuario sea veterinario → `403 Forbidden` si no lo es.  
+- **CA-05:** Validar que la configuración de agenda exista → `404 Not Found` si no existe.  
+- **CA-06:** Retornar la configuración completa de la agenda (`ScheduleConfigResponse`) incluyendo los días de la semana, horarios de inicio y fin, y si están activos o no.  
+
+### 📦 Ejemplo de Request  
+```http
+GET /api/v1/schedule-config/my-schedule-config
+```
+
+### 📦 Ejemplo de Respuesta (Exitosa)
+```json
+{
+  "success": true,
+  "data": {
+    "id": "a0a98f18-55a7-4220-9440-fd023dd568bb",
+    "vetId": "57516e06-8655-47df-8caf-46dea940c32f",
+    "days": [
+      {
+        "id": "6d445975-0789-4c4b-9234-ed9756770e85",
+        "scheduleId": "a0a98f18-55a7-4220-9440-fd023dd568bb",
+        "isActive": true,
+        "weekday": "LUNES",
+        "startTime": 480,
+        "endTime": 1080
+      },
+      {
+        "id": "1564fc18-fa77-46bd-ac6b-f6f5e6c792d0",
+        "scheduleId": "a0a98f18-55a7-4220-9440-fd023dd568bb",
+        "isActive": true,
+        "weekday": "MARTES",
+        "startTime": 480,
+        "endTime": 1080
+      },
+      {
+        "id": "fcada645-9bca-434b-bec3-f6dfeb26f138",
+        "scheduleId": "a0a98f18-55a7-4220-9440-fd023dd568bb",
+        "isActive": true,
+        "weekday": "MIERCOLES",
+        "startTime": 480,
+        "endTime": 1080
+      },
+      {
+        "id": "7d5384ba-5a00-4d04-a84e-119aa2ae769f",
+        "scheduleId": "a0a98f18-55a7-4220-9440-fd023dd568bb",
+        "isActive": false,
+        "weekday": "JUEVES",
+        "startTime": 540,
+        "endTime": 1080
+      },
+      {
+        "id": "9cbc0909-8a36-41d2-ade7-c19c16e1432b",
+        "scheduleId": "a0a98f18-55a7-4220-9440-fd023dd568bb",
+        "isActive": false,
+        "weekday": "VIERNES",
+        "startTime": 540,
+        "endTime": 1080
+      },
+      {
+        "id": "66ee1751-545d-4828-bb65-fa2e5a4ac782",
+        "scheduleId": "a0a98f18-55a7-4220-9440-fd023dd568bb",
+        "isActive": false,
+        "weekday": "SABADO",
+        "startTime": 540,
+        "endTime": 1080
+      },
+      {
+        "id": "4bb7767a-ba51-4a68-a50d-a44854a9b87d",
+        "scheduleId": "a0a98f18-55a7-4220-9440-fd023dd568bb",
+        "isActive": false,
+        "weekday": "DOMINGO",
+        "startTime": 540,
+        "endTime": 1080
+      }
+    ]
+  },
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-21T19:48:52.684Z"
+}
+```
+---
+**ID:** `HU-V-08`  
+**Título:** _[Modificar horarios de agenda del veterinario]_  
+**Rol:** _[Veterinario]_  
+
+### 📝 Descripción  
+Como Veterinario, quiero modificar los horarios disponibles por día de la semana, para adaptar la agenda a mis horarios reales y mantener la disponibilidad actualizada.
+
+### 🔧 Detalles Técnicos  
+- **Método:** `PATCH`  
+- **Ruta:** `/api/v1/schedule-config`  
+- **Roles Permitidos:** `[Veterinario]`  
+- **Autenticación:** Requiere JWT válido  
+- **DTO de Entrada:** `ScheduleConfigForUpdateDto`  
+- **DTO de Respuesta:** `ScheduleConfigResponse`  
+- **Datos Incluidos:** Días de la semana con horarios de inicio y fin, estado activo/inactivo de cada día.  
+
+### ✅ Criterios de Aceptación
+- **CA-01:** La ruta debe estar protegida y solo accesible mediante autenticación JWT.  
+- **CA-02:** Solo los usuarios con rol `Veterinario` pueden acceder al endpoint.  
+- **CA-03:** Validar que el usuario exista → `404 Not Found` si no existe.  
+- **CA-04:** Validar que el usuario sea veterinario → `403 Forbidden` si no lo es.  
+- **CA-05:** Validar que la configuración de agenda exista → `404 Not Found` si no existe.  
+- **CA-06:** Validar que los días enviados en la solicitud existan en la agenda → `404 Not Found` si algún día no existe.  
+- **CA-07:** Actualizar los campos enviados (`isActive`, `startTime`, `endTime`) para cada día.  
+- **CA-08:** Retornar la configuración de agenda actualizada (`ScheduleConfigResponse`) con los días modificados.  
+
+### 📦 Ejemplo de Request Body
+```json
+{
+  "days": [
+    {
+      "weekday": "LUNES",
+      "isActive": true,
+      "startTime": 480,
+      "endTime": 1080
+    },
+    {
+      "weekday": "MARTES",
+      "isActive": false
+    }
+  ]
+}
+```
+### 📦 Ejemplo de Respuesta (Exitosa)
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "a0a98f18-55a7-4220-9440-fd023dd568bb",
+    "vetId": "57516e06-8655-47df-8caf-46dea940c32f",
+    "days": [
+      {
+        "id": "6d445975-0789-4c4b-9234-ed9756770e85",
+        "scheduleId": "a0a98f18-55a7-4220-9440-fd023dd568bb",
+        "isActive": true,
+        "weekday": "LUNES",
+        "startTime": 480,
+        "endTime": 1080
+      },
+      {
+        "id": "1564fc18-fa77-46bd-ac6b-f6f5e6c792d0",
+        "scheduleId": "a0a98f18-55a7-4220-9440-fd023dd568bb",
+        "isActive": false,
+        "weekday": "MARTES",
+        "startTime": 480,
+        "endTime": 1080
+      }
+    ]
+  },
+  "message": "Solicitud exitosa",
+  "timestamp": "2025-10-21T20:15:00.000Z"
+}
+
+```

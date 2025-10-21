@@ -5,7 +5,7 @@
 ### 👤 General
 
 * **HU-G-01:** Como usuario registrado, quiero poder iniciar sesión en el sistema, para acceder a mis funciones autorizadas.
-* **HU-G-01:** Como usuario, quiero consultar la lista de servicios activos para usarlos en la gestión de turnos o registros médicos.
+* **HU-G-02:** Como usuario, quiero consultar la lista de servicios activos para usarlos en la gestión de turnos o registros médicos.
 
 ### 👑 Superadmin
 * **HU-SA-01:** Como Superadmin, quiero registrar nuevos usuarios con roles Recepcionista o Veterinario, para incorporar nuevo personal al sistema.
@@ -29,6 +29,17 @@
 * **HU-R-09:** Como Recepcionista, quiero ver la lista de turnos del día, ordenados por horario, para organizar mi trabajo.
 * **HU-R-10:** Como Recepcionista, quiero ver el historial de turnos de una mascota, para responder consultas de los dueños.
 
+### 👨‍⚕️ Veterinario
+* **HU-V-01:** Como Veterinario, quiero ver la lista de mis turnos asignados, para organizar mi jornada.
+* **HU-V-02:** Como Veterinario, quiero registrar consultas médicas (diagnóstico, tratamiento, notas) para las mascotas que atendí, para mantener el historial clínico actualizado.
+* **HU-V-03:** Como Veterinario, quiero editar o actualizar consultas ya registradas, para corregir errores o agregar información adicional.
+* **HU-V-04:** Como Veterinario, quiero registrar vacunas aplicadas a una mascota, para llevar un control de vacunación.
+* **HU-V-05:** Como Veterinario, quiero actualizar los datos de una vacuna previamente registrada (nombre o descripción), para corregir errores o complementar la información en el historial de vacunación de la mascota.
+* **HU-V-06:** Como Veterinario, quiero poder eliminar vacunas registradas de un historial médico, para corregir errores o registros duplicados y mantener actualizado el historial clínico de la mascota.
+* **HU-V-07:** Como Veterinario, quiero poder ver mi agenda semanal (días y horarios), para conocer mi disponibilidad.
+* **HU-V-08:** Como Veterinario, quiero modificar los horarios disponibles por día de la semana, para adaptar la agenda a mis horarios reales.
+
+
 
 <!-- ### 👑 Superadmin
 
@@ -36,7 +47,7 @@
 * **HU-03:** Como Superadmin, quiero crear, editar, listar y desactivar usuarios recepcionistas y veterinario, para gestionar al personal de recepción y de veterinaria.
 * **HU-04:** Como Superadmin, quiero poder resetear la contraseña de un usuario, para asistir en casos de bloqueo o pérdida.
 * **HU-23**: Como Superadmin, quiero crear, editar, listar y eliminar los servicios que ofrece la clínica (como consultas, vacunación, etc.), para mantener actualizado el catálogo. -->
-* **HU-29**: Como Recepcionista, quiero que al crear un turno, solo pueda seleccionar veterinarios que tengan habilitado el servicio seleccionado, para asegurar que la mascota será atendida por un profesional apto.
+<!-- * **HU-29**: Como Recepcionista, quiero que al crear un turno, solo pueda seleccionar veterinarios que tengan habilitado el servicio seleccionado, para asegurar que la mascota será atendida por un profesional apto. -->
 
 ---
 
@@ -59,12 +70,12 @@
 
 ### 👨‍⚕️ Veterinario
 
-* **HU-14:** Como Veterinario, quiero ver la lista de mis turnos asignados, para organizar mi jornada.
+<!-- * **HU-14:** Como Veterinario, quiero ver la lista de mis turnos asignados, para organizar mi jornada.
 * **HU-15:** Como Veterinario, quiero registrar consultas médicas (diagnóstico, tratamiento, notas) para las mascotas que atendí, para mantener el historial clínico actualizado.
 * **HU-16:** Como Veterinario, quiero editar o actualizar consultas ya registradas, para corregir errores o agregar información adicional.
 * **HU-17:** Como Veterinario, quiero registrar vacunas aplicadas a una mascota, para llevar un control de vacunación.
 * **HU-18:** Como Veterinario, quiero consultar el historial clínico y vacunas de una mascota, para tener contexto clínico completo antes de atender.
 * **HU-21**: Como Veterinario, quiero poder ver mi agenda semanal (días y horarios), para conocer mi disponibilidad.
 * **HU-22**: Como Veterinario, quiero modificar los horarios disponibles por día de la semana, para adaptar la agenda a mis horarios reales.
-* **HU-25**: Como Veterinario, quiero ver el servicio asociado a cada turno, para saber con qué prepararme antes de atender al paciente.
+* **HU-25**: Como Veterinario, quiero ver el servicio asociado a cada turno, para saber con qué prepararme antes de atender al paciente. -->
 
