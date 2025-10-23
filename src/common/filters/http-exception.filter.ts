@@ -7,6 +7,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { ErrorResponse } from '../interfaces/error.response';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -31,16 +32,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
       }
     }
 
-    // Si querés, loguealo
-    console.error(`[Error] ${request.method} ${request.url}`, exception);
-
-    response.status(statusCode).json({
+    const errorResponse: ErrorResponse = {
       success: false,
       data: null,
       message,
       statusCode,
       path: request.url,
       timestamp: new Date().toISOString(),
-    });
+    };
+
+    response.status(statusCode).json(errorResponse);
   }
 }

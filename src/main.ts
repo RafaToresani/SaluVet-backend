@@ -13,6 +13,12 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get('port');
   const version = configService.get('version');
+  app.enableCors({
+    origin: 'http://localhost:4200',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  });
   app.setGlobalPrefix(`api/${version}`);
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalInterceptors(new ResponseInterceptor());
